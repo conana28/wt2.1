@@ -26,7 +26,9 @@ const ProfileButton = () => {
           <Link href="/test">Test</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">Log Out</DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
+          <Link href="/api/auth/signout?callbackURL=/">Logout</Link>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

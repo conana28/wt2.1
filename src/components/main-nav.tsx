@@ -46,7 +46,15 @@ export function MainNav() {
           >
             <DropdownMenuItem>Find</DropdownMenuItem>
             <DropdownMenuItem>Add </DropdownMenuItem>
-            <DropdownMenuItem>Show</DropdownMenuItem>
+            <DropdownMenuItem>
+              {" "}
+              <Link
+                href="/test"
+                className="text-foreground/60 transition-colors hover:text-foreground/80"
+              >
+                Test
+              </Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </nav>
