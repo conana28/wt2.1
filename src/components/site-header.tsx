@@ -1,9 +1,9 @@
 import Link from "next/link";
 
-import { CommandMenu } from "@/components/command-menu";
 import { MainNav } from "@/components/main-nav";
 import { MobileNav } from "@/components/mobile-nav";
 import { ModeToggle } from "@/components/mode-toggle";
+import WineSearch from "./wine-search";
 import ProfileButton from "@/components/profile-button";
 // Needed to add a button to the navbar
 import { cn } from "@/lib/utils";
@@ -21,8 +21,7 @@ export function SiteHeader() {
         {/* Right end of Navbar */}
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
-            {/* Replace with Wine Search */}
-            <CommandMenu />
+            <WineSearch />
           </div>
           <nav className="flex items-center">
             {/* To add an icon button */}
