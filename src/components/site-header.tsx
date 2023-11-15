@@ -24,7 +24,10 @@ export function SiteHeader() {
         {/* Right end of Navbar */}
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
-            <WineSearch />
+            <SignedIn>
+              <WineSearch />
+            </SignedIn>
+            <SignedOut>Winetrak</SignedOut>
           </div>
           <nav className="flex items-center">
             {/* To add an icon button */}
@@ -48,11 +51,10 @@ export function SiteHeader() {
             <ModeToggle />
             <SignedIn>
               {/* Mount the UserButton component */}
-
               <UserButton />
             </SignedIn>
             <SignedOut>
-              {/* Signed out users get sign in button */}
+              {/* Signed out users get sign in icon */}
               <SignInButton>
                 <Button variant="ghost" className="w-9 px-0">
                   {/* <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" /> */}

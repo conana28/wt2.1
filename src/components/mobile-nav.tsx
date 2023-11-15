@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/navigation";
-import { ViewVerticalIcon } from "@radix-ui/react-icons";
+import { ViewVerticalIcon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 
 import { docsConfig } from "@/config/docs";
 import { siteConfig } from "@/config/site";
@@ -23,7 +23,8 @@ export function MobileNav() {
           variant="ghost"
           className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
-          <ViewVerticalIcon className="h-5 w-5" />
+          {/* <ViewVerticalIcon className="h-5 w-5" /> */}
+          <HamburgerMenuIcon className="h-5 w-5" />
           <span className="sr-only">Toggle Menu</span>
         </Button>
       </SheetTrigger>
