@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { dark, neobrutalism } from "@clerk/themes";
+import { EnterIcon, SunIcon } from "@radix-ui/react-icons";
 
 import { MainNav } from "@/components/main-nav";
 import { MobileNav } from "@/components/mobile-nav";
@@ -7,7 +10,7 @@ import WineSearch from "./wine-search";
 import ProfileButton from "@/components/profile-button";
 // Needed to add a button to the navbar
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { siteConfig } from "@/config/site";
 
@@ -43,7 +46,24 @@ export function SiteHeader() {
               </div>
             </Link> */}
             <ModeToggle />
-            <ProfileButton />
+            <SignedIn>
+              {/* Mount the UserButton component */}
+
+              <UserButton />
+            </SignedIn>
+            <SignedOut>
+              {/* Signed out users get sign in button */}
+              <SignInButton>
+                <Button variant="ghost" className="w-9 px-0">
+                  {/* <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" /> */}
+                  {/* <EnterIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" /> */}
+                  <EnterIcon className=" h-[1.2rem] w-[1.2rem] " />
+                  <span className="sr-only">Sign-In</span>
+                </Button>
+              </SignInButton>
+            </SignedOut>
+
+            {/* <ProfileButton /> */}
           </nav>
         </div>
       </div>
