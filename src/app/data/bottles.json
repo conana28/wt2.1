@@ -1,0 +1,16 @@
+[
+  {
+    "_id": {
+      "$oid": "6301ffc73fccf1ba01ce881d"
+    },
+    "country": "Get from C:_Users_con_a_OneDrive_WT21",
+    "rack": "BF",
+    "shelf": "9",
+    "vintage": "2007",
+    "wineText": "Produttori del Barbaresco  Barbaresco Riserva Montestefano",
+    "wineId": "4300",
+    "wine": {
+      "$oid": "6301ff4b3fccf1ba01ce8792"
+    }
+  }
+]

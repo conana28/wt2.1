@@ -1,0 +1,19 @@
+[
+  {
+    "_id": {
+      "$oid": "6301ff4b3fccf1ba01ce863a"
+    },
+    "producer": "A",
+    "wineName": "Aa12",
+    "country": "Get from C:_Users_con_a_OneDrive_WT21",
+    "region": "Victoria",
+    "subRegion": "Yarra Valley",
+    "wineId": "1000",
+    "__v": 1,
+    "bottles": [
+      {
+        "$oid": "6301ffc73fccf1ba01ce8914"
+      }
+    ]
+  }
+]
