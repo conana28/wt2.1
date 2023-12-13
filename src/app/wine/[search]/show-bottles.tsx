@@ -34,6 +34,7 @@ type Props = {
   updateBottle: (b: Bottle) => void;
   addBottle: (b: Bottle) => void;
   deleteBottle: (b: number) => void;
+  consumeBottle: (b: number) => void;
 };
 
 const ShowBottles = ({
@@ -41,6 +42,7 @@ const ShowBottles = ({
   updateBottle,
   deleteBottle,
   addBottle,
+  consumeBottle,
 }: Props) => {
   const { setShow } = useContext(Context);
   const [openDialog, setOpenDialog] = useState(false);
@@ -48,6 +50,7 @@ const ShowBottles = ({
   const [updatedBottle, setUpdatedBottle] = useState<Bottle | null>(null);
   const [addedBottle, setAddedBottle] = useState<Bottle | null>(null);
   const [deletedBottle, setDeletedBottle] = useState(0);
+  const [consumedBottle, setConsumedBottle] = useState(0);
   const [isLargeScreen, setisLargeScreen] = useState(true);
 
   // console.log("Wine passed ", wine);
@@ -97,6 +100,12 @@ const ShowBottles = ({
     }
   }, [deletedBottle]);
 
+  useEffect(() => {
+    if (consumedBottle > 0) {
+      deleteBottle(consumedBottle);
+    }
+  }, [consumedBottle]);
+
   //  Type assertion (wine.bottle as Bottle[]) to explicitly tell TypeScript that you
   // are certain that wine.bottle will always be an array of Bottle objects.
   return (
@@ -140,6 +149,7 @@ const ShowBottles = ({
               setUpdatedBottle={setUpdatedBottle}
               setAddedBottle={setAddedBottle}
               setDeletedBottle={setDeletedBottle}
+              setConsumedBottle={setConsumedBottle}
             />
           </div>
         </DialogContent>

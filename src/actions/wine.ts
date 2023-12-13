@@ -15,7 +15,6 @@ export async function searchWines(data: Inputs) {
     // console.log(result.data);
     try {
       const wines = await prisma.wine.findMany({
-        include: { bottle: true },
         where: {
           OR: [
             {
@@ -26,6 +25,40 @@ export async function searchWines(data: Inputs) {
             },
           ],
         },
+        include: {
+          bottle: {
+            where: {
+              consume: {
+                equals: null,
+              },
+            },
+            select: {
+              id: true,
+              vintage: true,
+              rack: true,
+              shelf: true,
+              cost: true,
+              occasion: true,
+              consume: true,
+              createdAt: true,
+              updatedAt: true,
+              wineId: true,
+            },
+          },
+        },
+
+        // include: { bottle: true },
+        // where: {
+        //   OR: [
+        //     {
+        //       producer: { contains: result.data.search, mode: "insensitive" },
+        //     },
+        //     {
+        //       wineName: { contains: result.data.search, mode: "insensitive" },
+        //     },
+        //   ],
+        // },
+
         orderBy: [{ producer: "asc" }, { wineName: "asc" }],
       });
       return { wines };

@@ -184,7 +184,7 @@ export const columns: ColumnDef<WineData>[] = [
       return (
         <Dialog open={open} onOpenChange={setOpen}>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger asChild disabled={show !== ""}>
               <Button variant="ghost" className="float-right mr-2 h-8 w-8 p-0">
                 {/* <span className="sr-only">Open menu</span> */}
                 <MoreHorizontal className="h-4 w-4" />

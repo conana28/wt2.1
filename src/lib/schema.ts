@@ -38,6 +38,8 @@ export const BottleFormSchema1 = z.object({
   rack: z.string().min(1, "Rack name is required."),
   shelf: z.string().optional(),
   cost: z.coerce.number().optional(),
+  consume: z.date().optional(),
+  occasion: z.string().optional(),
 });
 
 export const BottleConsumeFormSchema = z.object({

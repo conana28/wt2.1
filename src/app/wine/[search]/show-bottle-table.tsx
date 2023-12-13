@@ -16,6 +16,16 @@ interface Props {
 }
 
 function showBottleTable({ wine, showBottleMaintenance }: Props) {
+  // Get bottle array from wine and sort by vintage
+  const bottles = wine.bottle as Bottle[]; // Assert that wine.bottles is of type Bottle[]
+
+  // Check if bottles is not an empty array before sorting
+  if (Array.isArray(bottles) && bottles.length > 0) {
+    bottles.sort((a, b) => a.vintage - b.vintage);
+  } else {
+    // Handle the case where wine.bottles is an empty array or not an array
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -28,7 +38,8 @@ function showBottleTable({ wine, showBottleMaintenance }: Props) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {(wine.bottle as Bottle[]).map((bottle) => (
+        {/* {(wine.bottle as Bottle[]).map((bottle) => ( */}
+        {bottles.map((bottle) => (
           <TableRow
             key={bottle.id}
             onClick={() => showBottleMaintenance(bottle)}

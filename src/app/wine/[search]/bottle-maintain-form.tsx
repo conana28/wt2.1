@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,10 +15,25 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { BottleFormSchema1 } from "@/lib/schema";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Context } from "./show-table";
 import { addBottle, updateBottle, deleteBottle } from "@/actions/bottle";
 import { Bottle } from "@prisma/client";
+import { X, Trash2, Plus, PocketKnifeIcon, CalendarIcon } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
 
 type BottleFormValues = z.infer<typeof BottleFormSchema1>;
 
@@ -29,6 +43,7 @@ interface BottleFormProps {
   setUpdatedBottle: (b: Bottle) => void;
   setAddedBottle: (b: Bottle) => void;
   setDeletedBottle: (b: number) => void;
+  setConsumedBottle: (b: number) => void;
 }
 
 export function BottleMaintainForm({
@@ -37,6 +52,7 @@ export function BottleMaintainForm({
   setUpdatedBottle,
   setAddedBottle,
   setDeletedBottle,
+  setConsumedBottle,
 }: BottleFormProps) {
   const { show, setShow, wine } = useContext(Context);
   const defaultValues: Partial<BottleFormValues> = {
@@ -44,18 +60,20 @@ export function BottleMaintainForm({
     rack: btl?.rack,
     shelf: btl?.shelf === null ? undefined : btl?.shelf,
     cost: btl?.cost === null ? undefined : btl?.cost,
+    occasion: "",
+    consume: undefined,
   };
   const form = useForm<BottleFormValues>({
     resolver: zodResolver(BottleFormSchema1),
     defaultValues,
   });
+  const [isConsume, setIsConsume] = useState(false);
 
   async function onSubmit(data: BottleFormValues) {
-    console.log("Submit ", data);
+    console.log("Form Submit ", data);
 
     if (btl) {
       const result = await updateBottle(data, btl.id); // Update the bottle table
-
       if (!result) {
         alert("Something went wrong - Update Bottle");
         return;
@@ -63,7 +81,13 @@ export function BottleMaintainForm({
     }
 
     const d = { ...btl, ...data };
-    setUpdatedBottle(d as Bottle);
+    // Check if consume
+    if (d.consume === undefined) {
+      setUpdatedBottle(d as Bottle);
+    } else {
+      setConsumedBottle(d.id as number);
+    }
+
     setOpenDialog(false);
   }
 
@@ -165,17 +189,126 @@ export function BottleMaintainForm({
             />
           </div>
         </div>
+        {/* Consume & Occasion */}
+        {isConsume && (
+          <div className="flex flex-row gap-4">
+            <div className="w-1/2 mt-2.5">
+              <FormField
+                control={form.control}
+                name="consume"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Consume</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              " pl-3 text-left font-normal",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value ? (
+                              format(field.value, "PPP")
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={(date) =>
+                            date > new Date() || date < new Date("1900-01-01")
+                          }
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="w-1/2">
+              <FormField
+                control={form.control}
+                name="occasion"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Occasion</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+        )}
 
         <div className="flex items-center justify-end space-x-4">
-          <Button
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  type="button"
+                  onClick={() => setOpenDialog(false)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent
+                side="bottom"
+                sideOffset={0}
+                align="end"
+                alignOffset={0}
+              >
+                <p>Cancel</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          {/* <Button
             size="xs"
             variant="secondary"
             type="button"
             onClick={() => setOpenDialog(false)}
           >
             Cancel
-          </Button>
-          <Button
+          </Button> */}
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  type="button"
+                  onClick={() => {
+                    if (btl && btl.id) {
+                      deleteBottleHandler(btl.id as number);
+                    }
+                  }}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" sideOffset={0} align="end">
+                <p>Delete</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          {/* <Button
             size="xs"
             variant="destructive"
             type="button"
@@ -187,8 +320,8 @@ export function BottleMaintainForm({
             }}
           >
             Delete
-          </Button>
-          <Button
+          </Button> */}
+          {/* <Button
             size="xs"
             variant="secondary"
             type="button"
@@ -197,9 +330,51 @@ export function BottleMaintainForm({
             }}
           >
             Add
-          </Button>
+          </Button> */}
+          {/* Add Button */}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  type="button"
+                  onClick={() => {
+                    addBottleHandler(form.getValues() as BottleFormValues);
+                  }}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" sideOffset={0} align="end">
+                <p>Add</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          {/* Consume */}
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  type="button"
+                  onClick={() => {
+                    setIsConsume(!isConsume);
+                  }}
+                >
+                  <PocketKnifeIcon className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" sideOffset={0} align="end">
+                <p>Consume</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
           <Button size="xs" type="submit">
-            Edit
+            {isConsume ? "Consume" : "Edit"}
           </Button>
         </div>
       </form>

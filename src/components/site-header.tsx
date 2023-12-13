@@ -21,6 +21,9 @@ export function SiteHeader() {
         {/* Left end of Navbar */}
         <MainNav />
         <MobileNav />
+
+        {/* Middle of Navbar */}
+
         {/* Right end of Navbar */}
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
@@ -29,6 +32,11 @@ export function SiteHeader() {
             </SignedIn>
             <SignedOut>Winetrak</SignedOut>
           </div>
+          <div className="text-primary">
+            {process.env.DATABASE_URL?.includes("supabase")
+              ? "Supabase"
+              : "localhost"}
+          </div>{" "}
           <nav className="flex items-center">
             {/* To add an icon button */}
             {/* <Link

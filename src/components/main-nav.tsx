@@ -13,6 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { Wine } from "lucide-react";
 
 export function MainNav() {
   const pathname = usePathname();
@@ -20,7 +21,8 @@ export function MainNav() {
   return (
     <div className="mr-4 hidden md:flex">
       <Link href="/" className="mr-6 flex items-center space-x-2">
-        <Icons.logo className="h-6 w-6" />
+        {/* <Icons.logo className="h-6 w-6" /> */}
+        <Wine className="h-4 w-4" />
         <span className="hidden font-bold sm:inline-block">
           {siteConfig.name}
         </span>

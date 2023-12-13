@@ -134,6 +134,8 @@ export async function updateBottle(data: In, id: number) {
         rack: result.data.rack,
         shelf: result.data.shelf === "" ? null : result.data.shelf,
         cost: result.data.cost === 0 ? null : result.data.cost,
+        occasion: result.data.occasion === "" ? null : result.data.occasion,
+        consume: result.data.consume === undefined ? null : result.data.consume,
       },
     });
     revalidatePath("/");
