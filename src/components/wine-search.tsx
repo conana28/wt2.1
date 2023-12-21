@@ -29,7 +29,13 @@ const WineSearch = () => {
         type="search"
         placeholder="Wine search"
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={(e) => {
+          setSearchTerm(e.target.value);
+          if (e.target.value === "") {
+            // Handle the input being cleared
+            router.push(`/`);
+          }
+        }}
         onKeyDown={handleKeyDown}
       />
       <Button

@@ -10,6 +10,59 @@ import {
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
+export async function getBottlesByCountry() {
+  const bottles = await prisma.bottle.findMany({
+    where: {
+      consume: null,
+    },
+    select: {
+      id: true,
+      wine: {
+        select: {
+          country: true,
+        },
+      },
+    },
+  });
+  return bottles;
+
+  // const bottlesByCountry = bottles.reduce(
+  //   (acc: { [key: string]: number }, bottle) => {
+  //     const country = bottle.wine.country;
+  //     if (!acc[country]) {
+  //       acc[country] = 0;
+  //     }
+  //     acc[country]++;
+  //     return acc;
+  //   },
+  //   {}
+  // );
+
+  // console.log(bottlesByCountry);
+  // return { bottlesByCountry };
+}
+
+export async function getBottlesByVintage() {
+  // const data =
+  //   await prisma.$queryRaw`SELECT vintage, COUNT(*) FROM "Bottle" GROUP BY vintage ORDER BY vintage ASC;`;
+
+  const bottlesByVintage = await prisma.bottle.groupBy({
+    where: {
+      consume: null,
+    },
+    by: ["vintage"],
+    _count: {
+      vintage: true,
+    },
+
+    orderBy: {
+      vintage: "asc",
+    },
+  });
+
+  return { bottlesByVintage };
+}
+
 type Inputs = z.infer<typeof BottleSearchSchema>;
 
 export async function searchBottles(data: Inputs) {

@@ -29,12 +29,17 @@ export function MainNav() {
       </Link>
       <nav className="flex items-center space-x-6 text-sm font-medium">
         <Link
+          href="/dashboard"
+          className="text-foreground/60 transition-colors hover:text-foreground/80"
+        >
+          Dashboard
+        </Link>
+        <Link
           href="/wine"
           className="text-foreground/60 transition-colors hover:text-foreground/80"
         >
           Wine
         </Link>
-
         <DropdownMenu>
           <DropdownMenuTrigger
             asChild
