@@ -8,6 +8,7 @@ import {
 } from "@/lib/schema";
 
 import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export async function getBottlesByCountry() {
@@ -24,32 +25,87 @@ export async function getBottlesByCountry() {
       },
     },
   });
+  // console.log(bottles);
   return bottles;
-
-  // const bottlesByCountry = bottles.reduce(
-  //   (acc: { [key: string]: number }, bottle) => {
-  //     const country = bottle.wine.country;
-  //     if (!acc[country]) {
-  //       acc[country] = 0;
-  //     }
-  //     acc[country]++;
-  //     return acc;
-  //   },
-  //   {}
-  // );
-
-  // console.log(bottlesByCountry);
-  // return { bottlesByCountry };
+}
+export async function getBottlesByVintage(country: string, vintage: number) {
+  let whereClause: Prisma.BottleWhereInput = {
+    consume: null,
+  };
+  // Add vintage to where clause if not 0
+  if (vintage !== 0) {
+    whereClause.vintage = +vintage;
+  }
+  if (country !== "All") {
+    whereClause.wine = {
+      country: country,
+    };
+  }
+  const bottles = await prisma.bottle.findMany({
+    where: whereClause,
+    select: {
+      id: true,
+      vintage: true,
+      rack: true,
+      shelf: true,
+      cost: true,
+      wine: {
+        select: {
+          producer: true,
+          wineName: true,
+          country: true,
+        },
+      },
+    },
+  });
+  // console.log(bottles);
+  return bottles;
 }
 
-export async function getBottlesByVintage() {
+export async function getBottleCountByVintage(
+  country: string,
+  vintage: number
+) {
   // const data =
   //   await prisma.$queryRaw`SELECT vintage, COUNT(*) FROM "Bottle" GROUP BY vintage ORDER BY vintage ASC;`;
 
-  const bottlesByVintage = await prisma.bottle.groupBy({
-    where: {
-      consume: null,
-    },
+  let whereClause: Prisma.BottleWhereInput = {
+    consume: null,
+  };
+
+  if (country !== "All") {
+    whereClause.wine = {
+      country: country,
+    };
+  }
+
+  if (country === "Other") {
+    whereClause.wine = {
+      country: {
+        notIn: [
+          "New Zealand",
+          "France",
+          "Italy",
+          "Australia",
+          "Spain",
+          "Germany",
+        ],
+      },
+    };
+  }
+
+  if (vintage !== 0) {
+    whereClause.vintage = +vintage;
+  }
+
+  const bottleCountByVintage = await prisma.bottle.groupBy({
+    // where: {
+    //   consume: null,
+    //   wine: {
+    //     country: country,
+    //   },
+    // },
+    where: whereClause,
     by: ["vintage"],
     _count: {
       vintage: true,
@@ -60,7 +116,7 @@ export async function getBottlesByVintage() {
     },
   });
 
-  return { bottlesByVintage };
+  return { bottleCountByVintage };
 }
 
 type Inputs = z.infer<typeof BottleSearchSchema>;

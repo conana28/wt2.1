@@ -4,9 +4,10 @@ type ChartProps = React.JSX.IntrinsicAttributes &
   React.ClassAttributes<HTMLDivElement> &
   React.HTMLAttributes<HTMLDivElement> & {
     data: any[]; // Replace any[] with the actual type of data
+    setCountry: (c: string) => void;
   };
 
-export default function PieChart({ data, ...props }: ChartProps) {
+export default function PieChart({ data, setCountry, ...props }: ChartProps) {
   return (
     <div {...props}>
       <ResponsivePie
@@ -54,6 +55,11 @@ export default function PieChart({ data, ...props }: ChartProps) {
         }}
         onClick={(data) => {
           console.log(`id ${data["id"]} value ${data["value"]}`);
+          setCountry(
+            data["id"].toString() === "NZ"
+              ? "New Zealand"
+              : data["id"].toString()
+          );
         }}
         role="application"
       />

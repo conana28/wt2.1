@@ -165,118 +165,67 @@ const dashboard = () => {
   }, [vintage, country]);
 
   return (
-    <div className="container">
-      {/* {bottles.length === 0 && <div>Loading...</div>} */}
-      <div className="grid lg:grid-cols-4 gap-6 mt-4">
-        <Card className="bg-slate-400">
-          <CardDescription className="text-center text-slate-50">
-            Bottles
-          </CardDescription>
-          <p className="text-center pb-1">999</p>
-        </Card>
-        <Card className="bg-slate-600">
-          <CardDescription className="text-center text-slate-50">
-            Wines
-          </CardDescription>
-          <p className="text-center pb-1">999</p>
-        </Card>
-        <Card className="bg-slate-500">
-          {" "}
-          <CardDescription className="text-center text-slate-50">
-            Consumed
-          </CardDescription>
-          <p className="text-center pb-1">999</p>
-        </Card>
-        <Card className="bg-slate-700">
-          {" "}
-          <CardDescription className="text-center text-slate-50">
-            Countries
-          </CardDescription>
-          <p className="text-center pb-1">999</p>{" "}
-        </Card>
-      </div>
-      <div className="flex flex-col  sm:flex-row gap-2 mt-4">
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle>Bottles by country</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <PieChart
-              className="w-full aspect-[4/3]"
-              data={countryData}
-              setCountry={setCountry}
-            />
-          </CardContent>
-        </Card>
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>Bottles by Vintage - {country}</div>
-                {country !== "All" && (
-                  <Button size="xs" onClick={() => setCountry("All")}>
-                    All
-                  </Button>
-                )}
-              </div>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {vintageData.length > 0 && (
-              <GroupedbarChart
+    <main className="container">
+      <div className="flex flex-col gap-4 p-4">
+        <div className="grid lg:grid-cols-4 gap-4">
+          <Card className="bg-slate-400">
+            <CardDescription className="text-center text-slate-50">
+              Bottles
+            </CardDescription>
+            <p className="text-center pb-1">732</p>
+          </Card>
+          <Card className="bg-slate-600">
+            <CardDescription className="text-center text-slate-50">
+              Wines
+            </CardDescription>
+            <p className="text-center pb-1">376</p>
+          </Card>
+          <Card className="bg-slate-500">
+            {" "}
+            <CardDescription className="text-center text-slate-50">
+              Consumed
+            </CardDescription>
+            <p className="text-center pb-1">AAA</p>
+          </Card>
+          <Card className="bg-slate-700">
+            {" "}
+            <CardDescription className="text-center text-slate-50">
+              Countries
+            </CardDescription>
+            <p className="text-center pb-1">AAA</p>{" "}
+          </Card>
+        </div>
+        <div className="grid lg:grid-cols-2 gap-4">
+          <Card className="flex flex-col">
+            <CardHeader>
+              <CardDescription>Wine Distribution by Country</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <PieChart
                 className="w-full aspect-[4/3]"
-                data={vintageData}
-                setShowBottlesByVintage={setShowBottlesByVintage}
-                setVintage={setVintage}
+                data={countryData}
+                setCountry={setCountry}
               />
-            )}
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+          <Card className="flex flex-col">
+            <CardHeader>
+              <CardDescription>Wines by Vintage</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {vintageData.length > 0 && (
+                <GroupedbarChart
+                  className="w-full aspect-[4/3]"
+                  data={vintageData}
+                  setShowBottlesByVintage={setShowBottlesByVintage}
+                  setVintage={setVintage}
+                />
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
-      {/* Show bottles by vintage */}
-      {bottlesByVintage.length > 0 && (
-        <Dialog
-          open={showBottlesByVintage}
-          onOpenChange={setShowBottlesByVintage}
-        >
-          {/* <DialogTrigger>Open</DialogTrigger> */}
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>
-                <span className="text-primary">
-                  {bottlesByVintage.length} Bottles from{" "}
-                  {country === "All" ? "All countries" : country}
-                  {" for "}
-                  {vintage}
-                </span>
-              </DialogTitle>
-              <DialogDescription></DialogDescription>
-            </DialogHeader>
-            <ScrollArea className="h-96 rounded-md border mt-4">
-              <div className="p-4 text-sm">
-                <ul className="space-y-4 overflow-auto">
-                  {bottlesByVintage.map((item) => (
-                    <li className="flex items-center">
-                      {item.wine.producer} {item.wine.wineName} [{item.rack}
-                      {item.shelf && item.shelf.length > 0 ? "/" : ""}
-                      {item.shelf} ]
-                      {item.cost && item.cost > 0 ? (
-                        <>
-                          <span>&nbsp;</span>
-                          <span className="text-primary">${item.cost}</span>
-                        </>
-                      ) : (
-                        ""
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </ScrollArea>
-          </DialogContent>
-        </Dialog>
-      )}
-    </div>
+    </main>
   );
 };
 

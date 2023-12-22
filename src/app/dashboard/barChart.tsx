@@ -1,12 +1,20 @@
 import { ResponsiveBar } from "@nivo/bar";
+import { set } from "date-fns";
 
 type ChartProps = React.JSX.IntrinsicAttributes &
   React.ClassAttributes<HTMLDivElement> &
   React.HTMLAttributes<HTMLDivElement> & {
     data: any[]; // Replace any[] with the actual type of data
+    setShowBottlesByVintage: (c: boolean) => void;
+    setVintage: (v: number) => void;
   };
 
-export default function GroupedbarChart({ data, ...props }: ChartProps) {
+export default function GroupedbarChart({
+  data,
+  setShowBottlesByVintage,
+  setVintage,
+  ...props
+}: ChartProps) {
   return (
     <div {...props}>
       <ResponsiveBar
@@ -70,9 +78,11 @@ export default function GroupedbarChart({ data, ...props }: ChartProps) {
           },
         }}
         onClick={(data) => {
-          alert(
-            `id ${data["id"]} value ${data["value"]} axis ${data["data"]["vintage"]}`
-          );
+          //   alert(
+          //     `id ${data["id"]} value ${data["value"]} axis ${data["data"]["vintage"]}`
+          //   );
+          setShowBottlesByVintage(true);
+          setVintage(data["data"]["vintage"]);
         }}
         role="application"
         ariaLabel="A grouped bar chart"
