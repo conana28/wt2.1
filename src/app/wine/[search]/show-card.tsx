@@ -14,6 +14,7 @@ import { Context } from "./show-table";
 import { WineForm } from "./wine-form";
 import { BottleForm } from "./bottle-form";
 import DeleteCard from "./delete-card";
+import NotesCard from "./notes-card";
 import ShowBottles from "./show-bottles";
 import { Bottle } from "@prisma/client";
 
@@ -74,6 +75,9 @@ export function ShowCard({ formType, id }: CharacterDisplayProps) {
     case "D":
       title = "Delete Wine";
       break;
+    case "N":
+      title = "Wine Notes";
+      break;
     case "S":
       title = "Show bottles";
       break;
@@ -95,6 +99,7 @@ export function ShowCard({ formType, id }: CharacterDisplayProps) {
       <CardContent className="-mt-4">
         {formType === "A" && <WineForm formType={formType} id={id} />}
         {formType === "E" && <WineForm formType={formType} id={id} />}
+        {formType === "N" && <NotesCard />}
         {formType === "D" && <DeleteCard />}
         {formType === "S" && (
           <ShowBottles
@@ -102,6 +107,9 @@ export function ShowCard({ formType, id }: CharacterDisplayProps) {
             updateBottle={updateBottle}
             addBottle={addBottle}
             deleteBottle={deleteBottle}
+            consumeBottle={function (b: number): void {
+              throw new Error("Function not implemented.");
+            }}
           />
         )}
         {formType === "B" && <BottleForm formType="A" id={id} />}

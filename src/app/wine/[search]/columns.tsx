@@ -30,101 +30,10 @@ export type WineData = {
   region: string;
   subRegion: string | null;
   type: string | null;
+  notes: string | null;
   bottle: Array<Bottle | []>;
   // bottle: Array<Bottle>;
 };
-
-export const columnsMob: ColumnDef<WineData>[] = [
-  {
-    id: "name",
-    header: "Matching wine",
-    accessorFn: (row) => `${row.producer} ${row.wineName}`,
-  },
-  {
-    accessorKey: "bottle.length",
-    header: () => <div className="text-center">Btls</div>,
-    cell: function Cell({ row }) {
-      return <div className="text-center">{row.original.bottle.length}</div>;
-    },
-  },
-
-  {
-    id: "actions",
-    header: () => <div className="text-right"></div>,
-    cell: function Cell({ row }) {
-      const [open, setOpen] = useState(false);
-      const { setShow, setWine } = useContext(Context);
-
-      return (
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className=" h-1 w-1 p-0">
-                {/* <span className="sr-only">Open menu</span> */}
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DialogTrigger asChild>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setShow("E");
-                    setWine(row.original);
-                  }}
-                >
-                  Edit
-                </DropdownMenuItem>
-              </DialogTrigger>
-              <DialogTrigger asChild>
-                {/* <DropdownMenuItem onClick={() => setOpenAddModal(true)}> */}
-                <DropdownMenuItem
-                  onClick={() => {
-                    setShow("A");
-                    setWine(row.original);
-                  }}
-                >
-                  Add Like
-                </DropdownMenuItem>
-              </DialogTrigger>
-              <DialogTrigger asChild>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setShow("D");
-                    setWine(row.original);
-                  }}
-                >
-                  Delete
-                </DropdownMenuItem>
-              </DialogTrigger>
-
-              <DialogTrigger asChild>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setShow("S");
-                    setWine(row.original);
-                  }}
-                >
-                  Show bottles
-                </DropdownMenuItem>
-              </DialogTrigger>
-
-              <DialogTrigger asChild>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setShow("B");
-                    setWine(row.original);
-                  }}
-                >
-                  Add bottle
-                </DropdownMenuItem>
-              </DialogTrigger>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </Dialog>
-      );
-    },
-  },
-];
 
 export const columns: ColumnDef<WineData>[] = [
   // {
@@ -191,6 +100,16 @@ export const columns: ColumnDef<WineData>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DialogTrigger asChild>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setShow("N");
+                    setWine(row.original);
+                  }}
+                >
+                  Notes
+                </DropdownMenuItem>
+              </DialogTrigger>
               <DialogTrigger asChild>
                 <DropdownMenuItem
                   onClick={() => {
@@ -287,6 +206,98 @@ export const columns: ColumnDef<WineData>[] = [
               wine={row.original}
             />
           )} */}
+        </Dialog>
+      );
+    },
+  },
+];
+
+export const columnsMob: ColumnDef<WineData>[] = [
+  {
+    id: "name",
+    header: "Matching wine",
+    accessorFn: (row) => `${row.producer} ${row.wineName}`,
+  },
+  {
+    accessorKey: "bottle.length",
+    header: () => <div className="text-center">Btls</div>,
+    cell: function Cell({ row }) {
+      return <div className="text-center">{row.original.bottle.length}</div>;
+    },
+  },
+
+  {
+    id: "actions",
+    header: () => <div className="text-right"></div>,
+    cell: function Cell({ row }) {
+      const [open, setOpen] = useState(false);
+      const { setShow, setWine } = useContext(Context);
+
+      return (
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className=" h-1 w-1 p-0">
+                {/* <span className="sr-only">Open menu</span> */}
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DialogTrigger asChild>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setShow("E");
+                    setWine(row.original);
+                  }}
+                >
+                  Edit
+                </DropdownMenuItem>
+              </DialogTrigger>
+              <DialogTrigger asChild>
+                {/* <DropdownMenuItem onClick={() => setOpenAddModal(true)}> */}
+                <DropdownMenuItem
+                  onClick={() => {
+                    setShow("A");
+                    setWine(row.original);
+                  }}
+                >
+                  Add Like
+                </DropdownMenuItem>
+              </DialogTrigger>
+              <DialogTrigger asChild>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setShow("D");
+                    setWine(row.original);
+                  }}
+                >
+                  Delete
+                </DropdownMenuItem>
+              </DialogTrigger>
+
+              <DialogTrigger asChild>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setShow("S");
+                    setWine(row.original);
+                  }}
+                >
+                  Show bottlesM
+                </DropdownMenuItem>
+              </DialogTrigger>
+
+              <DialogTrigger asChild>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setShow("B");
+                    setWine(row.original);
+                  }}
+                >
+                  Add bottle
+                </DropdownMenuItem>
+              </DialogTrigger>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </Dialog>
       );
     },

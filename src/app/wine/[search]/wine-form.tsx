@@ -20,6 +20,7 @@ import { addWine, updateWine } from "@/actions/wine";
 import { useContext } from "react";
 import { Context } from "./show-table";
 import { Edit } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 
 type WineFormValues = z.infer<typeof WineFormDataSchema>;
 
@@ -35,8 +36,9 @@ export function WineForm({ formType, id }: WineFormProps) {
     wineName: wine.wineName,
     country: wine.country,
     region: wine.region,
-    subRegion: wine.subRegion || undefined,
-    type: wine.type || undefined,
+    subRegion: wine.subRegion || "",
+    type: wine.type || "",
+    notes: wine.notes || "",
   };
   const form = useForm<WineFormValues>({
     resolver: zodResolver(WineFormDataSchema),
@@ -160,6 +162,24 @@ export function WineForm({ formType, id }: WineFormProps) {
                   <FormLabel>Type</FormLabel>
                   <FormControl>
                     <Input placeholder="Type" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-row gap-4">
+          <div className="w-full">
+            <FormField
+              control={form.control}
+              name="notes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Notes</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Notes" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -16,6 +16,7 @@ export const WineFormDataSchema = z.object({
   region: z.string().min(1, "Region is required."),
   subRegion: z.string().optional(),
   type: z.string().optional(),
+  notes: z.string().optional(),
 });
 
 export const BottleSearchSchema = z.object({

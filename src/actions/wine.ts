@@ -95,6 +95,7 @@ export async function addWine(data: In) {
         region: result.data.region,
         subRegion: result.data.subRegion,
         type: result.data.type,
+        notes: result.data.notes,
       },
     });
     // Revalidate data
@@ -122,6 +123,7 @@ export async function updateWine(data: In, id: number) {
         region: result.data.region,
         subRegion: result.data.subRegion,
         type: result.data.type,
+        notes: result.data.notes,
       },
     });
     // Revalidate data
