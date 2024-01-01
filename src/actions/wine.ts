@@ -8,11 +8,16 @@ import { revalidatePath } from "next/cache";
 
 type Inputs = z.infer<typeof WineSearchSchema>;
 
+// Fetch count of all wines
+export async function getWineCount() {
+  const wineCount = await prisma.wine.count();
+  return wineCount;
+}
+
 export async function searchWines(data: Inputs) {
   const result = WineSearchSchema.safeParse(data);
   console.log("Parse: ", result);
   if (result.success) {
-    // console.log(result.data);
     try {
       const wines = await prisma.wine.findMany({
         where: {

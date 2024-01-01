@@ -13,6 +13,9 @@ import {
   getBottleCountByVintage,
   getBottlesByCountry,
   getBottlesByVintage,
+  getBottleCount,
+  getUniqueBottleCount,
+  getConsumeBottleCount,
 } from "@/actions/bottle";
 import PieChart from "./pieChart";
 import GroupedbarChart from "./barChart";
@@ -26,6 +29,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { getWineCount } from "@/actions/wine";
 
 type BottleCount = {
   vintage: number;
@@ -62,13 +66,17 @@ const dashboard = () => {
   const [vintageData, setVintageData] = React.useState<vintageCount[]>([]);
   const [countryData, setCountryData] = React.useState<countryCount[]>([]);
   const [showBottlesByVintage, setShowBottlesByVintage] = React.useState(false);
+  const [bottleCount, setBottleCount] = React.useState<number>(0); // store vintage selected in bar chart
+  const [uniqueBottleCount, setUniqueBottleCount] = React.useState<number>(0); // store vintage selected in bar chart
+  const [totalWines, setTotalWines] = React.useState<number>(0); // store vintage selected in bar chart
+  const [consumeBottleCount, setConsumeBottleCount] = React.useState<number>(0); // store vintage selected in bar chart
   const [vintage, setVintage] = React.useState<number>(0); // store vintage selected in bar chart
   const [bottlesByVintage, setBottlesByVintage] = React.useState<
     bottlesByVintage[]
   >([]);
 
+  // Get Data for pie chart
   useEffect(() => {
-    // Get Data for pie chart
     async function fetchCountryData() {
       const response = await getBottlesByCountry();
       const newArray: countryCount[] = [];
@@ -121,8 +129,8 @@ const dashboard = () => {
     fetchCountryData();
   }, []);
 
+  // Get Data for bar chart
   useEffect(() => {
-    // Get Data for bar chart
     async function fetchVintageCountData() {
       const response = await getBottleCountByVintage(country, 0);
       const result: BottleCount[] = response.bottleCountByVintage;
@@ -153,8 +161,8 @@ const dashboard = () => {
     fetchVintageCountData();
   }, [country]);
 
+  // Get List bottles by vintage
   useEffect(() => {
-    // Get List bottles by vintage
     async function fetchBottlesByVintageData() {
       const response = await getBottlesByVintage(country, vintage);
       setBottlesByVintage(response);
@@ -164,35 +172,60 @@ const dashboard = () => {
     if (vintage > 0) fetchBottlesByVintageData();
   }, [vintage, country]);
 
+  // Get how many bottles in the cellar
+  useEffect(() => {
+    async function fetchBottleCount() {
+      const response = await getBottleCount();
+      setBottleCount(response);
+    }
+    async function fetchUniqueBottleCount() {
+      const response = await getUniqueBottleCount();
+      setUniqueBottleCount(response);
+    }
+    async function fetchConsumeBottleCount() {
+      const response = await getConsumeBottleCount();
+      setConsumeBottleCount(response);
+    }
+    async function fetchWineCount() {
+      const response = await getWineCount();
+      console.log(response);
+      setTotalWines(response);
+    }
+    fetchBottleCount();
+    fetchUniqueBottleCount();
+    fetchWineCount();
+    fetchConsumeBottleCount();
+  }, []);
+
   return (
     <div className="container">
       {/* {bottles.length === 0 && <div>Loading...</div>} */}
       <div className="grid lg:grid-cols-4 gap-6 mt-4">
         <Card className="bg-slate-400">
           <CardDescription className="text-center text-slate-50">
-            Bottles
+            Total bottles
           </CardDescription>
-          <p className="text-center pb-1">999</p>
+          <p className="text-center pb-1">{bottleCount}</p>
         </Card>
         <Card className="bg-slate-600">
           <CardDescription className="text-center text-slate-50">
-            Wines
+            Wines with Bottles
           </CardDescription>
-          <p className="text-center pb-1">999</p>
+          <p className="text-center pb-1">{uniqueBottleCount}</p>
         </Card>
         <Card className="bg-slate-500">
           {" "}
           <CardDescription className="text-center text-slate-50">
             Consumed
           </CardDescription>
-          <p className="text-center pb-1">999</p>
+          <p className="text-center pb-1">{consumeBottleCount}</p>
         </Card>
         <Card className="bg-slate-700">
           {" "}
           <CardDescription className="text-center text-slate-50">
-            Countries
+            Total Wines
           </CardDescription>
-          <p className="text-center pb-1">999</p>{" "}
+          <p className="text-center pb-1">{totalWines}</p>{" "}
         </Card>
       </div>
       <div className="flex flex-col  sm:flex-row gap-2 mt-4">

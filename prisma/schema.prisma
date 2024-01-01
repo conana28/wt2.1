@@ -19,6 +19,7 @@ model Wine {
   region    String
   subRegion String?
   type      String?
+  notes     String?
   bottle    Bottle[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

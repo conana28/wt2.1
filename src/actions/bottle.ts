@@ -11,6 +11,40 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
+// Fetch count of all bottles
+export async function getBottleCount() {
+  const bottleCount = await prisma.bottle.count({
+    where: {
+      consume: null,
+    },
+  });
+  return bottleCount;
+}
+// Fetch count of all consumedbottles
+export async function getConsumeBottleCount() {
+  const consumeBottleCount = await prisma.bottle.count({
+    where: {
+      consume: {
+        not: null,
+      },
+    },
+  });
+  return consumeBottleCount;
+}
+// Fetch count of all bottles with a unique wineId and where consume is null
+export async function getUniqueBottleCount() {
+  const uniqueBottleCount = await prisma.bottle.groupBy({
+    by: ["wineId"],
+    _count: {
+      wineId: true,
+    },
+    where: {
+      consume: null,
+    },
+  });
+  return uniqueBottleCount.length;
+}
+// Fetch count of bottles by country
 export async function getBottlesByCountry() {
   const bottles = await prisma.bottle.findMany({
     where: {
