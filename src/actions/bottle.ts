@@ -20,6 +20,33 @@ export async function getBottleCount() {
   });
   return bottleCount;
 }
+// Fetch all consumedbottles
+export async function getConsumedBottles() {
+  const consumedBottles = await prisma.bottle.findMany({
+    where: {
+      consume: {
+        not: null,
+      },
+    },
+    select: {
+      id: true,
+      vintage: true,
+      rack: true,
+      shelf: true,
+      cost: true,
+      consume: true,
+      occasion: true,
+      wine: {
+        select: {
+          producer: true,
+          wineName: true,
+          country: true,
+        },
+      },
+    },
+  });
+  return consumedBottles;
+}
 // Fetch count of all consumedbottles
 export async function getConsumeBottleCount() {
   const consumeBottleCount = await prisma.bottle.count({
@@ -252,10 +279,12 @@ export async function addBottle(data: In, id: number) {
         rack: result.data.rack,
         shelf: result.data.shelf === "" ? null : result.data.shelf,
         cost: result.data.cost === 0 ? null : result.data.cost,
+        consume: result.data.consume === null ? null : result.data.consume,
+        occasion: result.data.occasion === "" ? null : result.data.occasion,
         wineId: id,
       },
     });
-    revalidatePath("/");
+    // revalidatePath("/");
     return { success: true, data: wine };
   }
 

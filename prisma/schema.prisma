@@ -33,11 +33,26 @@ model Bottle {
   cost      Int?
   consume   DateTime?
   occasion  String?
+  // notes     Note[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   wineId    Int
   wine      Wine      @relation(fields: [wineId], references: [id])
 }
+
+// model Note {
+//   id        Int       @id @default(autoincrement())
+//   vintage   Int       @default(0)
+//   author      String
+//   noteText      String
+//   rating     String?
+//   drinkFrom   Int?
+//   drinkTo   Int?
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime  @updatedAt
+//   bottleId    Int
+//   note      Note      @relation(fields: [bottleId], references: [id])
+// }
 
 model Country {
   id        Int      @id @default(autoincrement())

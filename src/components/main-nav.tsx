@@ -13,7 +13,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { Wine } from "lucide-react";
+import { PocketKnifeIcon, User, Wine } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export function MainNav() {
   const pathname = usePathname();
@@ -40,26 +41,26 @@ export function MainNav() {
         >
           Wine
         </Link>
+
         <DropdownMenu>
-          <DropdownMenuTrigger
-            asChild
-            className="text-foreground/60 transition-colors hover:text-foreground/80"
-          >
+          {/* <DropdownMenuTrigger asChild>
+            <Avatar className="h-8 w-8 cursor-pointer">
+              <AvatarImage src="" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger> */}
+          <DropdownMenuTrigger className="text-foreground/60 transition-colors hover:text-foreground/80">
             <p>Cellar</p>
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="start"
-            className="text-foreground/60 transition-colors hover:text-foreground/80 "
-          >
-            <DropdownMenuItem>Find</DropdownMenuItem>
-            <DropdownMenuItem>Add </DropdownMenuItem>
-            <DropdownMenuItem>
-              {" "}
-              <Link
-                href="/test"
-                className="text-foreground/60 transition-colors hover:text-foreground/80"
-              >
-                Test
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem asChild>
+              <Link href="/test">
+                <User className="mr-2 h-4 w-4" /> Test
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/consume">
+                <PocketKnifeIcon className="mr-2 h-3 w-3" /> Consume
               </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>

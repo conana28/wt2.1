@@ -28,6 +28,7 @@ export const Context = createContext<TFOContext>({
     region: "",
     subRegion: "",
     type: "",
+    notes: "",
     bottle: [],
   },
   setWine: () => {},
@@ -45,6 +46,7 @@ export default function ShowTable({ wines }: Props) {
     region: "",
     subRegion: "",
     type: "",
+    notes: "",
     bottle: [],
   });
 
