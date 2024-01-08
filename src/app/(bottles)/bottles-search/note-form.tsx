@@ -15,58 +15,54 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { BottleFormSchema } from "@/lib/schema";
+import { NoteFormSchema } from "@/lib/schema";
+// import { addNote, updateNote } from "@/actions/wine";
 import { useContext } from "react";
-import { Context } from "./show-table";
-import { addBottle } from "@/actions/bottle";
+import { Edit } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { addNote } from "@/actions/note";
 
-type BottleFormValues = z.infer<typeof BottleFormSchema>;
+type NoteFormValues = z.infer<typeof NoteFormSchema>;
 
-interface BottleFormProps {
+interface NoteFormProps {
   formType: string;
-  id: number; // wine id
+  note?: NoteFormValues;
+  vintage: number;
+  wid: number;
 }
 
-export function BottleForm({ formType, id }: BottleFormProps) {
-  const { show, setShow, wine } = useContext(Context);
-  const defaultValues: Partial<BottleFormValues> = {
-    vintage: 2020,
-    rack: "",
-    shelf: "",
-    cost: 0,
-    qty: 1,
+export function NoteForm({
+  formType,
+  note,
+  vintage = 2020,
+  wid,
+}: NoteFormProps) {
+  const defaultValues: Partial<NoteFormValues> = {
+    author: note?.author ?? "",
+    rating: note?.rating ?? "",
+    noteText: note?.noteText ?? "",
+    drinkFrom: note?.drinkFrom ?? "",
+    drinkTo: note?.drinkTo ?? "",
+    vintage: vintage,
   };
-  const form = useForm<BottleFormValues>({
-    resolver: zodResolver(BottleFormSchema),
+  const form = useForm<NoteFormValues>({
+    resolver: zodResolver(NoteFormSchema),
     defaultValues,
   });
 
-  async function onSubmit(data: BottleFormValues) {
+  async function onSubmit(data: NoteFormValues) {
     console.log("Submit ", data);
-
-    if (data.qty === 1) {
-      const result = await addBottle(data, id);
-
-      if (!result) {
-        alert("Something went wrong - Add Wine");
-        return;
-      }
-    } else if (data.qty > 1) {
-      const results = await Promise.all(
-        Array.from({ length: data.qty }, () => addBottle(data, id))
-      );
-
-      if (results.some((result) => !result)) {
-        alert("Something went wrong - Add Multiple Wine");
-        return;
-      }
+    let result;
+    if (formType === "A") {
+      result = await addNote(data, wid);
+    } else {
+      // result = await updateNote(data, wid);
     }
 
-    // const result = await addBottle(data, id);
-    // if (!result) {
-    //   alert("Something went wrong - Add Wine");
-    //   return;
-    // }
+    if (!result) {
+      alert("Something went wrong - Add Wine");
+      return;
+    }
 
     // if (result.error) {
     //   // set local error state
@@ -74,7 +70,6 @@ export function BottleForm({ formType, id }: BottleFormProps) {
     //   return;
     // }
 
-    setShow("");
     form.reset();
   }
 
@@ -85,12 +80,12 @@ export function BottleForm({ formType, id }: BottleFormProps) {
           <div className="w-1/2">
             <FormField
               control={form.control}
-              name="vintage"
+              name="author"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Vintage</FormLabel>
+                  <FormLabel>Author</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input placeholder="Author..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -100,12 +95,30 @@ export function BottleForm({ formType, id }: BottleFormProps) {
           <div className="w-1/2">
             <FormField
               control={form.control}
-              name="cost"
+              name="rating"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Cost</FormLabel>
+                  <FormLabel>Rating</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input placeholder="Rating..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-row gap-4">
+          <div className="w-full">
+            <FormField
+              control={form.control}
+              name="noteText"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Note text</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Note text..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -117,12 +130,12 @@ export function BottleForm({ formType, id }: BottleFormProps) {
           <div className="w-1/2">
             <FormField
               control={form.control}
-              name="rack"
+              name="drinkFrom"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Rack</FormLabel>
+                  <FormLabel>Drink from</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input placeholder="From..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -132,12 +145,12 @@ export function BottleForm({ formType, id }: BottleFormProps) {
           <div className="w-1/2">
             <FormField
               control={form.control}
-              name="shelf"
+              name="drinkTo"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Shelf</FormLabel>
+                  <FormLabel>Drink to</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input placeholder="To..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -145,32 +158,21 @@ export function BottleForm({ formType, id }: BottleFormProps) {
             />
           </div>
         </div>
-
-        <div className="flex flex-row gap-4">
-          <div className="w-1/2">
-            <FormField
-              control={form.control}
-              name="qty"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Qty</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center justify-center space-x-4">
-          <Button size="xs" variant="secondary" onClick={() => setShow("")}>
+        <FormField
+          name="vintage"
+          control={form.control}
+          render={({ field }) => (
+            <FormControl>
+              <Input type="hidden" {...field} />
+            </FormControl>
+          )}
+        />
+        <div className="flex items-center justify-end space-x-4">
+          {/* <Button size="xs" variant="secondary" onClick={() => null}>
             Cancel
-          </Button>
+          </Button> */}
           <Button size="xs" type="submit">
-            {/* {formType === "A" ? "Add" : "Edit"} */}
-            Add
+            {formType === "A" ? "Add" : "Edit"}
           </Button>
         </div>
       </form>

@@ -19,12 +19,29 @@ export const WineFormDataSchema = z.object({
   notes: z.string().optional(),
 });
 
-export const BottleSearchSchema = z.object({
-  search: z.string().optional(),
-  vintage: z.coerce.number().optional(),
-  country: z.string().optional(),
-  rack: z.string().optional(),
-});
+export const BottleSearchSchema = z
+  .object({
+    search: z.string().optional(),
+    // vintage: z.coerce.number().optional(),
+    vintage: z.string().optional(),
+    // .refine((value) => value === "" || !isNaN(Number(value)), {
+    //   message: "Please enter a valid number or leave it blank",
+    // }),
+    country: z.string().optional(),
+    rack: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      const values = Object.values(data);
+      return values.some(
+        (value) => value !== "" && value !== null && value !== undefined
+      );
+    },
+    {
+      message: "Must select at least one search criteria",
+      path: ["search"],
+    }
+  );
 
 export const BottleFormSchema = z.object({
   vintage: z.coerce.number().min(1970, "Vintage is required."),
@@ -46,4 +63,13 @@ export const BottleFormSchema1 = z.object({
 export const BottleConsumeFormSchema = z.object({
   consume: z.date(),
   occasion: z.string().optional(),
+});
+
+export const NoteFormSchema = z.object({
+  vintage: z.coerce.number().min(1970, "Vintage is required."),
+  author: z.string().min(1, "Author is required."),
+  noteText: z.string().optional(),
+  rating: z.string().min(1, "Rating is required."),
+  drinkFrom: z.string().optional(),
+  drinkTo: z.string().optional(),
 });

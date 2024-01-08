@@ -44,8 +44,54 @@ export async function getConsumedBottles() {
         },
       },
     },
+    orderBy: { consume: "desc" },
   });
   return consumedBottles;
+}
+
+// Fetch all bottles
+export async function getBottlesInCellar() {
+  const bottlesInCellar = await prisma.bottle.findMany({
+    where: {
+      consume: null,
+    },
+    select: {
+      id: true,
+      vintage: true,
+      rack: true,
+      shelf: true,
+      cost: true,
+      consume: true,
+      occasion: true,
+      wineId: true,
+      wine: {
+        select: {
+          producer: true,
+          wineName: true,
+          country: true,
+        },
+      },
+    },
+  });
+
+  const bottlesWithNoteCount = await Promise.all(
+    bottlesInCellar.map(async (bottle) => {
+      const notes = await prisma.note.findMany({
+        where: {
+          wineId: bottle.wineId,
+          vintage: bottle.vintage,
+        },
+      });
+      return {
+        ...bottle,
+        noteCount: notes.length,
+      };
+    })
+  );
+
+  // console.log(bottlesWithNoteCount);
+  return bottlesWithNoteCount;
+  // return bottlesInCellar;
 }
 // Fetch count of all consumedbottles
 export async function getConsumeBottleCount() {
@@ -184,7 +230,7 @@ type Inputs = z.infer<typeof BottleSearchSchema>;
 
 export async function searchBottles(data: Inputs) {
   const result = BottleSearchSchema.safeParse(data);
-  // console.log(result);
+  console.log(result);
   if (result.success) {
     // console.log(result.data);
     try {
@@ -221,7 +267,7 @@ export async function searchBottles(data: Inputs) {
           },
 
           // vintage: {
-          //   equals: result.data.vintage,
+          //   equals: parseInt(result.data.vintage),
           // },
           // You can use "equals" to filter by a specific rack, or "equals" or "in" for an array of racks.
           consume: {
@@ -348,5 +394,107 @@ export async function deleteBottle(id: number) {
     return { success: true };
   } catch (error) {
     return { success: false, error };
+  }
+}
+
+export async function searchBottles1(data: Inputs) {
+  const result = BottleSearchSchema.safeParse(data);
+  console.log(data);
+  console.log(result);
+  if (!result.success) {
+    return { success: false, error: result.error.format() };
+  }
+  let whereClause: Prisma.BottleWhereInput = {
+    wine: {
+      OR: [
+        {
+          producer: {
+            contains: data.search,
+            mode: "insensitive",
+          },
+        },
+        {
+          wineName: {
+            contains: data.search,
+            mode: "insensitive",
+          },
+        },
+      ],
+      AND: [
+        {
+          country: {
+            contains: data.country,
+            mode: "insensitive",
+          },
+        },
+      ],
+    },
+
+    rack: {
+      contains: data.rack,
+      mode: "insensitive",
+    },
+
+    // vintage: {
+    //   equals: parseInt(result.data.vintage),
+    // },
+    // You can use "equals" to filter by a specific rack, or "equals" or "in" for an array of racks.
+    consume: {
+      equals: null,
+    },
+  };
+  if (data.vintage !== "" && data.vintage !== undefined) {
+    whereClause.vintage = {
+      equals: parseInt(data.vintage),
+    };
+  }
+  try {
+    const bottles = await prisma.bottle.findMany({
+      where: whereClause,
+
+      select: {
+        id: true,
+        vintage: true,
+        rack: true,
+        shelf: true,
+        cost: true,
+        wineId: true,
+        wine: {
+          select: {
+            id: true,
+            producer: true,
+            wineName: true,
+            country: true,
+          },
+        },
+      },
+      orderBy: {
+        vintage: "asc",
+      },
+    });
+
+    if (!bottles) {
+      console.log("Bottle - Something went wrong");
+      return;
+    }
+    const bottlesWithNoteCount = await Promise.all(
+      bottles.map(async (bottle) => {
+        const notes = await prisma.note.findMany({
+          where: {
+            wineId: bottle.wineId,
+            vintage: bottle.vintage,
+          },
+        });
+        return {
+          ...bottle,
+          noteCount: notes.length,
+        };
+      })
+    );
+
+    return { bottlesWithNoteCount };
+    // return { bottles };
+  } catch (error) {
+    return { error };
   }
 }
