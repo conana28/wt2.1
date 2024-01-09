@@ -9,7 +9,7 @@ import { ThemeProvider } from "@/components/providers";
 // import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header";
 import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
-import { Toaster as NewYorkToaster } from "@/components/ui/toaster";
+import { Toaster } from "sonner";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -40,12 +40,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <div className="relative flex min-h-screen flex-col">
                 <SiteHeader />
                 <div className="flex-1">{children}</div>
+                <Toaster />
                 {/* <SiteFooter /> */}
               </div>
               <TailwindIndicator />
             </ThemeProvider>
             {/* <ThemeSwitcher /> */}
-            <NewYorkToaster />
             {/* <DefaultToaster /> */}
           </body>
         </html>

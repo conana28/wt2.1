@@ -468,9 +468,21 @@ export async function searchBottles1(data: Inputs) {
           },
         },
       },
-      orderBy: {
-        vintage: "asc",
-      },
+      orderBy: [
+        {
+          wine: {
+            producer: "asc",
+          },
+        },
+        {
+          wine: {
+            wineName: "asc",
+          },
+        },
+        {
+          vintage: "asc",
+        },
+      ],
     });
 
     if (!bottles) {

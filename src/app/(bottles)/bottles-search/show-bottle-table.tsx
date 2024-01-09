@@ -2,6 +2,7 @@ import React from "react";
 
 import { TBottle, columns } from "./columns";
 import { DataTable } from "./data-table";
+import { Toaster } from "sonner";
 
 // Define a type for the props
 type ShowBottleTableProps = {
@@ -14,6 +15,7 @@ export const ShowBottleTable = ({ bottlesFound }: ShowBottleTableProps) => {
     <div className="-mt-4">
       {/* {bottlesFound.length > 0 && ( */}
       <DataTable columns={columns} data={bottlesFound} />
+
       {/* )} */}
     </div>
   );

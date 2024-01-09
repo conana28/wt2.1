@@ -29,6 +29,7 @@ interface NoteFormProps {
   note?: NoteFormValues;
   vintage: number;
   wid: number;
+  dialogClose: () => void;
 }
 
 export function NoteForm({
@@ -36,6 +37,7 @@ export function NoteForm({
   note,
   vintage = 2020,
   wid,
+  dialogClose,
 }: NoteFormProps) {
   const defaultValues: Partial<NoteFormValues> = {
     author: note?.author ?? "",
@@ -71,8 +73,14 @@ export function NoteForm({
     // }
 
     form.reset();
+    dialogClose();
   }
 
+  function cancel() {
+    console.log("Cancel");
+    form.reset();
+    dialogClose();
+  }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -168,9 +176,9 @@ export function NoteForm({
           )}
         />
         <div className="flex items-center justify-end space-x-4">
-          {/* <Button size="xs" variant="secondary" onClick={() => null}>
+          <Button size="xs" type="button" variant="secondary" onClick={cancel}>
             Cancel
-          </Button> */}
+          </Button>
           <Button size="xs" type="submit">
             {formType === "A" ? "Add" : "Edit"}
           </Button>
