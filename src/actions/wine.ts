@@ -8,12 +8,6 @@ import { revalidatePath } from "next/cache";
 
 type Inputs = z.infer<typeof WineSearchSchema>;
 
-// Fetch count of all wines
-export async function getWineCount() {
-  const wineCount = await prisma.wine.count();
-  return wineCount;
-}
-
 export async function searchWines(data: Inputs) {
   const result = WineSearchSchema.safeParse(data);
   console.log("Parse: ", result);
@@ -81,6 +75,7 @@ export async function searchWines(data: Inputs) {
 
 type In = z.infer<typeof WineFormDataSchema>;
 
+// Add Wine
 export async function addWine(data: In) {
   const result = WineFormDataSchema.safeParse(data);
   console.log("Parse", result);
@@ -108,6 +103,7 @@ export async function addWine(data: In) {
   }
 }
 
+// Update Wine
 export async function updateWine(data: In, id: number) {
   const result = WineFormDataSchema.safeParse(data);
   // console.log("Parse", result);
@@ -136,6 +132,7 @@ export async function updateWine(data: In, id: number) {
   }
 }
 
+// Delete Wine
 export async function deleteWine(id: number) {
   try {
     await prisma.wine.delete({ where: { id } });
@@ -144,4 +141,10 @@ export async function deleteWine(id: number) {
   } catch (error) {
     return { success: false, error };
   }
+}
+
+// Fetch count of all wines
+export async function getWineCount() {
+  const wineCount = await prisma.wine.count();
+  return wineCount;
 }

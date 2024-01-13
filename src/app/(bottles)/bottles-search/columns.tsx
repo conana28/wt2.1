@@ -22,23 +22,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { getNotes } from "@/actions/note";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import { NoteForm } from "./note-form";
-import { BottleMaintainForm } from "@/app/wine/[search]/bottle-maintain-form";
-import { BottleMaintenanceForm } from "./bottle-maintenance-form";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { BottleAddEditForm } from "./bottle-add-edit-form";
 import { Badge } from "@/components/ui/badge";
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+import { BottleConsumeForm } from "./bottle-consume-form";
+import { BottleDeleteForm } from "./bottle-delete-form";
 
 export const columns: ColumnDef<TBottle>[] = [
   {
@@ -51,6 +44,7 @@ export const columns: ColumnDef<TBottle>[] = [
     header: "Country",
   },
   {
+    // show badge if noteCount > 0 and open dialog on click
     accessorKey: "noteCount",
     header: "Notes",
     cell: function Cell({ row }) {
@@ -125,29 +119,24 @@ export const columns: ColumnDef<TBottle>[] = [
     accessorKey: "vintage",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Vintage
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        // <Button
+        //   variant="ghost"
+        //   onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        // >
+        //   Vintage
+        //   <ArrowUpDown className="ml-2 h-4 w-4" />
+        // </Button>
+        // );
+        <div className="text-center">Vintage</div>
       );
     },
+    cell: ({ row }) => (
+      <div className="text-center">{row.getValue("vintage")}</div>
+    ),
   },
   {
     accessorKey: "rack",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Rack
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Rack",
   },
   {
     accessorKey: "shelf",
@@ -159,7 +148,7 @@ export const columns: ColumnDef<TBottle>[] = [
     cell: function Cell({ row }) {
       return (
         <div className="text-right mr-4">
-          {row.original.cost ? row.original.cost / 100 : ""}
+          {row.original.cost ? (row.original.cost / 100).toFixed(2) : ""}
         </div>
       );
     },
@@ -193,7 +182,6 @@ export const columns: ColumnDef<TBottle>[] = [
       const btlMtce = async () => {
         console.log("btlMtce");
         setDialogType("btlMtce");
-        // setOpen(true);
       };
       const dialogClose = () => {
         setBottleFormType("");
@@ -215,24 +203,8 @@ export const columns: ColumnDef<TBottle>[] = [
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Notes</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {/* Show Notes */}
-              <DialogTrigger asChild>
-                <DropdownMenuItem
-                  onClick={fetchNotes}
-                  disabled={bottle.noteCount === 0}
-                >
-                  <span>Show </span>
-                </DropdownMenuItem>
-              </DialogTrigger>
-              {/* Add Note */}
-              <DialogTrigger asChild>
-                <DropdownMenuItem onClick={addNote}>Add note</DropdownMenuItem>
-              </DialogTrigger>
-              <DropdownMenuSeparator />
-              <DropdownMenuLabel>Bottles</DropdownMenuLabel>
-              <DropdownMenuSeparator />
+              {/* <DropdownMenuLabel>Bottles</DropdownMenuLabel>
+              <DropdownMenuSeparator /> */}
               {/* Edit Bottle Maintenace */}
               <DialogTrigger asChild>
                 <DropdownMenuItem
@@ -255,7 +227,33 @@ export const columns: ColumnDef<TBottle>[] = [
                   Add
                 </DropdownMenuItem>
               </DialogTrigger>
+              <DialogTrigger asChild>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setBottleFormType("C");
+                    setDialogType("btlConsume");
+                  }}
+                >
+                  Consume
+                </DropdownMenuItem>
+              </DialogTrigger>
+              <DialogTrigger asChild>
+                <DropdownMenuItem
+                  onClick={() => {
+                    // setBottleFormType("D");
+                    setDialogType("btlDelete");
+                  }}
+                >
+                  Delete
+                </DropdownMenuItem>
+              </DialogTrigger>
               <DropdownMenuSeparator />
+              {/* Add Note */}
+              <DialogTrigger asChild>
+                <DropdownMenuItem onClick={addNote}>Add note</DropdownMenuItem>
+              </DialogTrigger>
+              <DropdownMenuSeparator />
+
               {/* Bottle Maintenace */}
               <DialogTrigger asChild>
                 <DropdownMenuItem onClick={btlMtce}>Btl mtce.</DropdownMenuItem>
@@ -362,7 +360,7 @@ export const columns: ColumnDef<TBottle>[] = [
               </DialogClose>
             </DialogContent>
           )}
-          {dialogType === "btlMtce" && (
+          {dialogType === "btlAddEdit" && (
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
                 <DialogTitle>{bottleFormType} Bottle</DialogTitle>
@@ -370,7 +368,47 @@ export const columns: ColumnDef<TBottle>[] = [
                   {bottle.vintage} {bottle.wine.producer} {bottle.wine.wineName}
                 </DialogDescription>
               </DialogHeader>
-              <BottleMaintenanceForm btl={bottle} dialogClose={dialogClose} />
+              <BottleAddEditForm
+                btl={bottle}
+                dialogClose={dialogClose}
+                bottleFormType={bottleFormType}
+              />
+              <DialogClose asChild>
+                <Button
+                  type="button"
+                  id="closeDialog"
+                  className="hidden"
+                ></Button>
+              </DialogClose>
+            </DialogContent>
+          )}
+          {dialogType === "btlConsume" && (
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Consume Bottle</DialogTitle>
+                <DialogDescription className="text-primary text-base">
+                  {bottle.vintage} {bottle.wine.producer} {bottle.wine.wineName}
+                </DialogDescription>
+              </DialogHeader>
+              <BottleConsumeForm btl={bottle} dialogClose={dialogClose} />
+              <DialogClose asChild>
+                <Button
+                  type="button"
+                  id="closeDialog"
+                  className="hidden"
+                ></Button>
+              </DialogClose>
+            </DialogContent>
+          )}
+          {dialogType === "btlDelete" && (
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>{bottleFormType} Bottle - delete</DialogTitle>
+                <DialogDescription className="text-primary text-base">
+                  {bottle.vintage} {bottle.wine.producer} {bottle.wine.wineName}
+                </DialogDescription>
+              </DialogHeader>
+              <BottleDeleteForm bid={bottle.id} dialogClose={dialogClose} />
               <DialogClose asChild>
                 <Button
                   type="button"

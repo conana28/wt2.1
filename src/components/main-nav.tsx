@@ -55,30 +55,32 @@ export function MainNav() {
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
               <Link href="/bottles-search">
-                <PocketKnifeIcon className="mr-2 h-3 w-3" /> Bottles Search
-                Pagination
+                {/* <PocketKnifeIcon className="mr-2 h-3 w-3" />  */}
+                Bottles Search
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/bottles-server-pagination">
-                <PocketKnifeIcon className="mr-2 h-3 w-3" /> Bottles Server
-                Pagination
+                {/* <PocketKnifeIcon className="mr-2 h-3 w-3" />  */}
+                Bottles Server Pagination
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/bottles">
-                <PocketKnifeIcon className="mr-2 h-3 w-3" /> Bottles Client
-                Pagination
+                {/* <PocketKnifeIcon className="mr-2 h-3 w-3" />  */}
+                Bottles Client Pagination
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/consume">
-                <PocketKnifeIcon className="mr-2 h-3 w-3" /> Consume
+                {/* <PocketKnifeIcon className="mr-2 h-3 w-3" />  */}
+                Consume
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/test">
-                <User className="mr-2 h-4 w-4" /> Test
+                {/* <User className="mr-2 h-4 w-4" />  */}
+                Test
               </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>

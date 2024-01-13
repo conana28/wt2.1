@@ -21,8 +21,8 @@ import { addBottle, updateBottle } from "@/actions/bottle";
 type BottleFormValues = {
   vintage: string;
   rack: string;
-  shelf?: string;
-  cost?: string;
+  shelf?: string | null;
+  cost?: string | null;
 };
 
 interface BottleFormProps {
@@ -36,10 +36,11 @@ export function BottleAddEditForm({
   dialogClose,
   bottleFormType,
 }: BottleFormProps) {
+  console.log(btl, bottleFormType);
   const defaultValues = {
-    vintage: bottleFormType === "A" ? "" : btl?.vintage,
+    vintage: bottleFormType === "A" ? "2020" : btl?.vintage,
     rack: bottleFormType === "A" ? "" : btl?.rack,
-    shelf: bottleFormType === "A" ? "" : btl?.shelf,
+    shelf: bottleFormType === "A" ? "" : btl?.shelf || "",
     cost: bottleFormType === "A" ? "" : btl?.cost,
   };
 
@@ -103,7 +104,8 @@ export function BottleAddEditForm({
                 <FormItem>
                   <FormLabel>Cost</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input type="number" {...field} value={field.value || 0} />
+                    {/* <Input type="number" {...field} /> */}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -135,7 +137,8 @@ export function BottleAddEditForm({
                 <FormItem>
                   <FormLabel>Shelf</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value || ""} />
+                    {/* <Input {...field} /> */}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
