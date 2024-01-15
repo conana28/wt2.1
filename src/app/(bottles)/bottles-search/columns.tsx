@@ -441,7 +441,7 @@ export type TBottle = {
   };
 };
 
-type TNote = {
+export type TNote = {
   id: number;
   vintage: number;
   author: string;

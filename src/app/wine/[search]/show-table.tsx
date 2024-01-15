@@ -82,7 +82,8 @@ export default function ShowTable({ wines }: Props) {
       <div className="flex flex-col sm:flex-row gap-2">
         <div className={`w-full sm:w-2/3 ${show !== "" ? "opacity-40" : ""}`}>
           {!isLargeScreen && (
-            <ScrollArea className={`w-92 rounded-md border h-${dynamicHeight}`}>
+            // <ScrollArea className={`w-92 rounded-md border h-${dynamicHeight}`}>
+            <ScrollArea className={`w-92 rounded-md border h-52`}>
               <DataTable columns={columnsMob} data={wines} />
             </ScrollArea>
           )}

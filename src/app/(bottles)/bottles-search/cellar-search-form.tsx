@@ -56,8 +56,8 @@ export function CellarSearchForm({ setBottlesFound }: Props) {
   return (
     <div className="">
       <Card className="">
-        <h1 className="text-base font-semibold ml-4 my-1">Search cellar</h1>
-        <Separator className="bg-slate-600 mb-2" />
+        <h1 className="text-base font-semibold ml-4 my-2">Search cellar</h1>
+        {/* <Separator className="bg-slate-600 mb-2" /> */}
 
         <Form {...form}>
           <form

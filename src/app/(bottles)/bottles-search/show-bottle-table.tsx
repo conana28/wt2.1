@@ -5,7 +5,7 @@ import { DataTable } from "./data-table";
 import { Toaster } from "sonner";
 
 // Define a type for the props
-type ShowBottleTableProps = {
+export type ShowBottleTableProps = {
   bottlesFound: TBottle[];
 };
 

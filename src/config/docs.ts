@@ -13,7 +13,10 @@ export const docsConfig: DocsConfig = {
       title: "Wine",
       href: "/wine",
     },
-
+    {
+      title: "Cellar",
+      href: "/bottles-search",
+    },
     // {
     //   title: "GitHub",
     //   href: "https://github.com/shadcn/ui",
@@ -23,7 +26,7 @@ export const docsConfig: DocsConfig = {
 
   sidebarNav: [
     {
-      title: "Cellar",
+      title: "Cellar1",
       items: [
         {
           title: "Find",

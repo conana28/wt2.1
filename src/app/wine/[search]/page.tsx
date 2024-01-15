@@ -1,5 +1,5 @@
 import { searchWines } from "@/actions/wine";
-import Container from "@/components/ui/container";
+// import Container from "@/components/ui/container";
 import ShowTable from "./show-table";
 
 // Gets the search param from the URL and passes it to the searchWines function
