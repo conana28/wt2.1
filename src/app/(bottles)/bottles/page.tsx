@@ -2,10 +2,11 @@
 
 import { getBottlesInCellar, getConsumedBottles } from "@/actions/bottle";
 import React, { useEffect, useState } from "react";
-import { TBottle, columns } from "./columns";
+import { columns } from "./columns";
 import { DataTable } from "./data-table";
+import { TBottle } from "@/types/bottle";
 
-const consumeTable = () => {
+const BottleTable = () => {
   const [bottles, setBottles] = useState<TBottle[]>([]);
 
   // Get bottles in the cellar
@@ -21,11 +22,10 @@ const consumeTable = () => {
 
   return (
     <div>
-      <div>
-        {bottles.length > 0 && <DataTable columns={columns} data={bottles} />}
-      </div>
+      <p>/bottles</p>
+      {bottles.length > 0 && <DataTable columns={columns} data={bottles} />}
     </div>
   );
 };
 
-export default consumeTable;
+export default BottleTable;

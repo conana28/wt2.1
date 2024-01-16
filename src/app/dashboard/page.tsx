@@ -61,7 +61,7 @@ type bottlesByVintage = {
   };
 };
 
-const dashboard = () => {
+const Dashboard = () => {
   const [country, setCountry] = React.useState<string>("All");
   const [vintageData, setVintageData] = React.useState<vintageCount[]>([]);
   const [countryData, setCountryData] = React.useState<countryCount[]>([]);
@@ -289,7 +289,7 @@ const dashboard = () => {
               <div className="p-4 text-sm">
                 <ul className="space-y-4 overflow-auto">
                   {bottlesByVintage.map((item) => (
-                    <li className="flex items-center">
+                    <li key={item.id} className="flex items-center">
                       {item.wine.producer} {item.wine.wineName} [{item.rack}
                       {item.shelf && item.shelf.length > 0 ? "/" : ""}
                       {item.shelf} ]
@@ -313,4 +313,4 @@ const dashboard = () => {
   );
 };
 
-export default dashboard;
+export default Dashboard;

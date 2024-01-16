@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { TCBottle } from "@/types/bottle";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ArrowUpDown } from "lucide-react";
@@ -8,22 +9,7 @@ import { ArrowUpDown } from "lucide-react";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export type TBottle = {
-  id: number;
-  vintage: number;
-  rack: string;
-  shelf: string | null;
-  cost: number | null;
-  consume: Date | null;
-  occasion: string | null;
-  wine: {
-    producer: string;
-    wineName: string;
-    country: string;
-  };
-};
-
-export const columns: ColumnDef<TBottle>[] = [
+export const columns: ColumnDef<TCBottle>[] = [
   {
     id: "name",
     header: "Wine",

@@ -1,12 +1,14 @@
 "use client";
 
-import { getConsumedBottles } from "@/actions/bottle";
 import React, { useEffect, useState } from "react";
-import { TBottle, columns } from "./columns";
-import { DataTable } from "./data-table";
 
-const consumeTable = () => {
-  const [consumedBottles, setConsumedBottles] = useState<TBottle[]>([]);
+import { getConsumedBottles } from "@/actions/bottle";
+import { columns } from "./columns";
+import { DataTable } from "./data-table";
+import { TCBottle } from "@/types/bottle";
+
+const ConsumeTable = () => {
+  const [consumedBottles, setConsumedBottles] = useState<TCBottle[]>([]);
 
   // Get consumed bottles in the cellar
   useEffect(() => {
@@ -21,15 +23,6 @@ const consumeTable = () => {
 
   return (
     <div>
-      {/* {consumedBottles.length > 0 &&
-        consumedBottles.map((bottle) => (
-          <div key={bottle.id}>
-            <p>
-              {bottle.vintage} {bottle.wine.producer}
-            </p>
-          </div>
-        ))}
-      <div> */}
       <div>
         {consumedBottles.length > 0 && (
           <DataTable columns={columns} data={consumedBottles} />
@@ -39,4 +32,4 @@ const consumeTable = () => {
   );
 };
 
-export default consumeTable;
+export default ConsumeTable;

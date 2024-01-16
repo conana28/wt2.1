@@ -2,13 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-import { format } from "date-fns";
-import { ArrowUpDown, CopyIcon, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -23,33 +21,135 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { getNotes } from "@/actions/note";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import { NoteForm } from "./note-form";
+import { TBottle } from "@/types/bottle";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-
-export type TBottle = {
+type TNote = {
   id: number;
   vintage: number;
-  rack: string;
-  shelf: string | null;
-  cost: number | null;
-  consume: Date | null;
-  occasion: string | null;
-  noteCount: number;
+  author: string;
+  noteText: string | null;
+  rating: string;
+  drinkFrom: string | null;
+  drinkTo: string | null;
+  createdAt: Date;
+  updatedAt: Date;
   wineId: number;
-  wine: {
-    producer: string;
-    wineName: string;
-    country: string;
+};
+type BottleProps = {
+  bottle: TBottle;
+};
+
+const BottleCell: React.FC<BottleProps> = ({ bottle }) => {
+  const [notes, setNotes] = useState<TNote[]>([]);
+  const [dialogType, setDialogType] = useState("");
+  const fetchNotes = async () => {
+    const response = await getNotes(bottle.wineId, bottle.vintage);
+    console.log(response);
+    setNotes(response);
+    setDialogType("show");
   };
+  const addNote = async () => {
+    setDialogType("add");
+  };
+  return (
+    <Dialog>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DialogTrigger asChild>
+            <DropdownMenuItem
+              onClick={fetchNotes}
+              disabled={bottle.noteCount === 0}
+            >
+              <span>Show Notes</span>
+            </DropdownMenuItem>
+          </DialogTrigger>
+          <DialogTrigger asChild>
+            <DropdownMenuItem onClick={addNote}>Add note</DropdownMenuItem>
+          </DialogTrigger>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => console.log(bottle.wineId, bottle.vintage)}
+          >
+            Show Notes Id
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      {dialogType === "show" && (
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Notes</DialogTitle>
+            <DialogDescription className="text-primary text-base">
+              {bottle.vintage} {bottle.wine.producer} {bottle.wine.wineName}
+            </DialogDescription>
+          </DialogHeader>
+          {/* <div className="flex items-center space-x-2"> */}
+          {notes.length > 0 && (
+            <ScrollArea className="h-96">
+              {notes.map((note) => (
+                <Card key={note.id}>
+                  <CardContent>
+                    <p>
+                      {note.author} {note.rating}
+                    </p>
+                    {note.noteText}
+                    {note.drinkFrom ? ` From ${note.drinkFrom}` : ""}
+                    {note.drinkTo ? ` To ${note.drinkTo}` : ""}
+                  </CardContent>
+                </Card>
+              ))}
+            </ScrollArea>
+          )}
+          {notes.length === 0 && (
+            <Card>
+              <CardContent className="text-center ">
+                <p className="mt-6">No notes found for this wine</p>
+              </CardContent>
+            </Card>
+          )}
+          {/* </div> */}
+          <DialogFooter className="sm:justify-start">
+            <DialogClose asChild>
+              <Button type="button" size="xs" variant="secondary">
+                Close
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      )}
+      {dialogType === "add" && (
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add Note</DialogTitle>
+            <DialogDescription className="text-primary text-base">
+              {bottle.vintage} {bottle.wine.producer} {bottle.wine.wineName}
+            </DialogDescription>
+          </DialogHeader>
+          <NoteForm
+            formType={"A"}
+            vintage={bottle.vintage}
+            wid={bottle.wineId}
+          />
+          <DialogFooter className="sm:justify-start">
+            <DialogClose asChild>
+              <Button type="button" size="xs" variant="secondary">
+                Close
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      )}
+    </Dialog>
+  );
 };
 
 export const columns: ColumnDef<TBottle>[] = [
@@ -111,125 +211,6 @@ export const columns: ColumnDef<TBottle>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      type TNote = {
-        id: number;
-        vintage: number;
-        author: string;
-        noteText: string | null;
-        rating: string;
-        drinkFrom: string | null;
-        drinkTo: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        wineId: number;
-      };
-      const bottle = row.original;
-      const [notes, setNotes] = useState<TNote[]>([]);
-      const [dialogType, setDialogType] = useState("");
-      const fetchNotes = async () => {
-        const response = await getNotes(bottle.wineId, bottle.vintage);
-        console.log(response);
-        setNotes(response);
-        setDialogType("show");
-      };
-      const addNote = async () => {
-        setDialogType("add");
-      };
-      return (
-        <Dialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DialogTrigger asChild>
-                <DropdownMenuItem
-                  onClick={fetchNotes}
-                  disabled={bottle.noteCount === 0}
-                >
-                  <span>Show Notes</span>
-                </DropdownMenuItem>
-              </DialogTrigger>
-              <DialogTrigger asChild>
-                <DropdownMenuItem onClick={addNote}>Add note</DropdownMenuItem>
-              </DialogTrigger>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => console.log(bottle.wineId, bottle.vintage)}
-              >
-                Show Notes Id
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          {dialogType === "show" && (
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle>Notes</DialogTitle>
-                <DialogDescription className="text-primary text-base">
-                  {bottle.vintage} {bottle.wine.producer} {bottle.wine.wineName}
-                </DialogDescription>
-              </DialogHeader>
-              {/* <div className="flex items-center space-x-2"> */}
-              {notes.length > 0 && (
-                <ScrollArea className="h-96">
-                  {notes.map((note) => (
-                    <Card key={note.id}>
-                      <CardContent>
-                        <p>
-                          {note.author} {note.rating}
-                        </p>
-                        {note.noteText}
-                        {note.drinkFrom ? ` From ${note.drinkFrom}` : ""}
-                        {note.drinkTo ? ` To ${note.drinkTo}` : ""}
-                      </CardContent>
-                    </Card>
-                  ))}
-                </ScrollArea>
-              )}
-              {notes.length === 0 && (
-                <Card>
-                  <CardContent className="text-center ">
-                    <p className="mt-6">No notes found for this wine</p>
-                  </CardContent>
-                </Card>
-              )}
-              {/* </div> */}
-              <DialogFooter className="sm:justify-start">
-                <DialogClose asChild>
-                  <Button type="button" size="xs" variant="secondary">
-                    Close
-                  </Button>
-                </DialogClose>
-              </DialogFooter>
-            </DialogContent>
-          )}
-          {dialogType === "add" && (
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle>Add Note</DialogTitle>
-                <DialogDescription className="text-primary text-base">
-                  {bottle.vintage} {bottle.wine.producer} {bottle.wine.wineName}
-                </DialogDescription>
-              </DialogHeader>
-              <NoteForm
-                formType={"A"}
-                vintage={bottle.vintage}
-                wid={bottle.wineId}
-              />
-              <DialogFooter className="sm:justify-start">
-                <DialogClose asChild>
-                  <Button type="button" size="xs" variant="secondary">
-                    Close
-                  </Button>
-                </DialogClose>
-              </DialogFooter>
-            </DialogContent>
-          )}
-        </Dialog>
-      );
-    },
+    cell: ({ row }) => <BottleCell bottle={row.original} />,
   },
 ];

@@ -7,15 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Bottle } from "@prisma/client";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+// import {
+//   Table,
+//   TableBody,
+//   TableCaption,
+//   TableCell,
+//   TableHead,
+//   TableHeader,
+//   TableRow,
+// } from "@/components/ui/table";
 import { WineData } from "./columns";
 import {
   Dialog,
@@ -23,9 +23,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Copy } from "lucide-react";
+// import { Label } from "@/components/ui/label";
+// import { Input } from "@/components/ui/input";
+// import { Copy } from "lucide-react";
 import { BottleMaintainForm } from "./bottle-maintain-form";
 import ShowBottleTable from "./show-bottle-table";
 
@@ -53,20 +53,18 @@ const ShowBottles = ({
   const [consumedBottle, setConsumedBottle] = useState(0);
   const [isLargeScreen, setisLargeScreen] = useState(true);
 
-  // console.log("Wine passed ", wine);
-
-  if (wine.bottle.length < 1) {
-    return (
-      <div>
-        <div className="text-primary ">There are no bottles of this wine</div>
-        <div className="flex justify-end">
-          <Button variant="secondary" size="xs" onClick={() => setShow("")}>
-            Cancel
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  // if (wine.bottle.length < 1) {
+  //   return (
+  //     <div>
+  //       <div className="text-primary ">There are no bottles of this wine</div>
+  //       <div className="flex justify-end">
+  //         <Button variant="secondary" size="xs" onClick={() => setShow("")}>
+  //           Cancel
+  //         </Button>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   const showBottleMaintenance = (b: Bottle) => {
     console.log("showBottleMaintenance", b);
@@ -85,26 +83,106 @@ const ShowBottles = ({
   useEffect(() => {
     if (updatedBottle) {
       updateBottle(updatedBottle);
+      setUpdatedBottle(null); // Reset the state after calling the function
     }
-  }, [updatedBottle]);
-
-  useEffect(() => {
     if (addedBottle) {
       addBottle(addedBottle);
+      setAddedBottle(null);
     }
-  }, [addedBottle]);
-
-  useEffect(() => {
     if (deletedBottle > 0) {
       deleteBottle(deletedBottle);
+      setDeletedBottle(0);
     }
-  }, [deletedBottle]);
-
-  useEffect(() => {
     if (consumedBottle > 0) {
-      deleteBottle(consumedBottle);
+      consumeBottle(consumedBottle);
+      setConsumedBottle(0);
     }
-  }, [consumedBottle]);
+  }, [
+    updatedBottle,
+    addedBottle,
+    deletedBottle,
+    consumedBottle,
+    updateBottle,
+    addBottle,
+    deleteBottle,
+    consumeBottle,
+  ]);
+
+  // useEffect(() => {
+  //   if (updatedBottle) {
+  //     updateBottle(updatedBottle);
+  //     setUpdatedBottle(null); // Reset the state after calling the function
+  //   }
+  // }, [updatedBottle, updateBottle]);
+
+  // useEffect(() => {
+  //   if (addedBottle) {
+  //     addBottle(addedBottle);
+  //     setAddedBottle(null); // Reset the state after calling the function
+  //   }
+  // }, [addedBottle, addBottle]);
+
+  // useEffect(() => {
+  //   if (deletedBottle > 0) {
+  //     deleteBottle(deletedBottle);
+  //     setDeletedBottle(0); // Reset the state after calling the function
+  //   }
+  // }, [deletedBottle, deleteBottle]);
+
+  // useEffect(() => {
+  //   if (consumedBottle > 0) {
+  //     consumeBottle(consumedBottle);
+  //     setConsumedBottle(0); // Reset the state after calling the function
+  //   }
+  // }, [consumedBottle, consumeBottle]);
+  // useEffect(() => {
+  //   if (updatedBottle) {
+  //     updateBottle(updatedBottle);
+
+  //   }
+  // }, [updatedBottle, updateBottle]);
+
+  // useEffect(() => {
+  //   if (addedBottle) {
+  //     addBottle(addedBottle);
+  //   }
+  // }, [addedBottle, addBottle]);
+
+  // useEffect(() => {
+  //   if (deletedBottle > 0) {
+  //     deleteBottle(deletedBottle);
+  //   }
+  // }, [deletedBottle, deleteBottle]);
+
+  // useEffect(() => {
+  //   if (consumedBottle > 0) {
+  //     consumeBottle(consumedBottle);
+  //   }
+  // }, [consumedBottle, consumeBottle]);
+
+  // useEffect(() => {
+  //   if (updatedBottle) {
+  //     updateBottle(updatedBottle);
+  //   }
+  // }, [updatedBottle]);
+
+  // useEffect(() => {
+  //   if (addedBottle) {
+  //     addBottle(addedBottle);
+  //   }
+  // }, [addedBottle]);
+
+  // useEffect(() => {
+  //   if (deletedBottle > 0) {
+  //     deleteBottle(deletedBottle);
+  //   }
+  // }, [deletedBottle]);
+
+  // useEffect(() => {
+  //   if (consumedBottle > 0) {
+  //     deleteBottle(consumedBottle);
+  //   }
+  // }, [consumedBottle]);
 
   //  Type assertion (wine.bottle as Bottle[]) to explicitly tell TypeScript that you
   // are certain that wine.bottle will always be an array of Bottle objects.

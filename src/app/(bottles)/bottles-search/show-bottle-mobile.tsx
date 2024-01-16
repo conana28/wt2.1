@@ -335,7 +335,13 @@ const ShowBottleMobile = ({ bottlesFound }: ShowBottleTableProps) => {
                         </DialogDescription>
                       </DialogHeader>
                       <BottleConsumeForm
-                        btl={bottle}
+                        btl={{
+                          id: bottle.id,
+                          vintage: bottle.vintage,
+                          rack: bottle.rack,
+                          consume: undefined,
+                          occasion: undefined,
+                        }}
                         dialogClose={dialogClose}
                       />
                       <DialogClose asChild>

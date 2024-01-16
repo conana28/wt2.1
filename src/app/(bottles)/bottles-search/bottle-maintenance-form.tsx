@@ -8,12 +8,8 @@ import {
   Pencil,
   Plus,
   PocketKnifeIcon,
-  Search,
-  SendHorizonalIcon,
   Trash2,
   X,
-  XCircle,
-  XCircleIcon,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -35,7 +31,6 @@ import {
 } from "@/actions/bottle";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { TBottle } from "./columns";
 import { Bottle } from "@prisma/client";
 import { useState } from "react";
 import {

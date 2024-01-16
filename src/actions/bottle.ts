@@ -399,8 +399,8 @@ export async function deleteBottle(id: number) {
 
 export async function searchBottles1(data: Inputs) {
   const result = BottleSearchSchema.safeParse(data);
-  console.log(data);
-  console.log(result);
+  // console.log(data);
+  // console.log(result);
   if (!result.success) {
     return { success: false, error: result.error.format() };
   }
@@ -459,6 +459,8 @@ export async function searchBottles1(data: Inputs) {
         shelf: true,
         cost: true,
         wineId: true,
+        consume: true,
+        occasion: true,
         wine: {
           select: {
             id: true,

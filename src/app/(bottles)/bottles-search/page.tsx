@@ -6,12 +6,11 @@ import { z } from "zod";
 import { BottleSearchSchema } from "@/lib/schema";
 import { CellarSearchForm } from "./cellar-search-form";
 import { ShowBottleTable } from "./show-bottle-table";
-import { TBottle } from "./columns";
 import ShowBottleMobile from "./show-bottle-mobile";
 
 type searchInputs = z.infer<typeof BottleSearchSchema>;
 
-const bottlesSearch = () => {
+const BottlesSearch = () => {
   const [searchData, setSearchData] = React.useState<searchInputs>();
   const [bottlesFound, setBottlesFound] = React.useState<any[]>([]);
 
@@ -43,4 +42,4 @@ const bottlesSearch = () => {
   );
 };
 
-export default bottlesSearch;
+export default BottlesSearch;

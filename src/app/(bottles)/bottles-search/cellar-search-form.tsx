@@ -3,13 +3,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Search, SendHorizonalIcon, XCircle, XCircleIcon } from "lucide-react";
+import { Search, XCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -17,10 +16,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { BottleSearchSchema } from "@/lib/schema";
-import { searchBottles, searchBottles1 } from "@/actions/bottle";
+import { searchBottles1 } from "@/actions/bottle";
 import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { TBottle } from "./columns";
+import { TBottle } from "@/types/bottle";
 
 // pass a prop to the form to set the bottlesFound state in the parent component
 type Props = {

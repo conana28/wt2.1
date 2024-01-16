@@ -1,8 +1,8 @@
 import React from "react";
 
-import { TBottle, columns } from "./columns";
+import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import { Toaster } from "sonner";
+import { TBottle } from "@/types/bottle";
 
 // Define a type for the props
 export type ShowBottleTableProps = {
