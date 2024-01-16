@@ -54,32 +54,32 @@ model Note {
   wine      Wine     @relation(fields: [wineId], references: [id])
 }
 
-model Country {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  rank      Int      @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  regions   Region[]
-}
+// model Country {
+//   id        Int      @id @default(autoincrement())
+//   name      String   @unique
+//   rank      Int      @unique
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   regions   Region[]
+// }
 
-model Region {
-  id         Int         @id @default(autoincrement())
-  name       String      @unique
-  rank       Int
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  countryId  Int
-  country    Country     @relation(fields: [countryId], references: [id])
-  subRegions SubRegion[]
-}
+// model Region {
+//   id         Int         @id @default(autoincrement())
+//   name       String      @unique
+//   rank       Int
+//   createdAt  DateTime    @default(now())
+//   updatedAt  DateTime    @updatedAt
+//   countryId  Int
+//   country    Country     @relation(fields: [countryId], references: [id])
+//   subRegions SubRegion[]
+// }
 
-model SubRegion {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  rank      Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  regionId  Int
-  region    Region   @relation(fields: [regionId], references: [id])
-}
+// model SubRegion {
+//   id        Int      @id @default(autoincrement())
+//   name      String   @unique
+//   rank      Int
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   regionId  Int
+//   region    Region   @relation(fields: [regionId], references: [id])
+// }

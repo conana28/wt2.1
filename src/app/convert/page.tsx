@@ -151,9 +151,9 @@ export default async function Convert() {
   }
 
   // makeWine();
-  // addBottles();
-  // addConsumed();
-  // addNotes();
+  addBottles();
+  addConsumed();
+  addNotes();
 
   // Remove wineId from type
   //set the type field in the wine table to empty
