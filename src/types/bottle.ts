@@ -24,6 +24,7 @@ export type TCBottle = {
   cost: number | null;
   consume: Date | null;
   occasion: string | null;
+  wineId: number;
   wine: {
     producer: string;
     wineName: string;

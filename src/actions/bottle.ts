@@ -10,6 +10,7 @@ import {
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { TBottle, TCBottle } from "@/types/bottle";
 
 // Fetch count of all bottles
 export async function getBottleCount() {
@@ -36,6 +37,7 @@ export async function getConsumedBottles() {
       cost: true,
       consume: true,
       occasion: true,
+      wineId: true,
       wine: {
         select: {
           producer: true,
@@ -75,7 +77,7 @@ export async function getBottlesInCellar() {
   });
 
   const bottlesWithNoteCount = await Promise.all(
-    bottlesInCellar.map(async (bottle) => {
+    bottlesInCellar.map(async (bottle: TCBottle) => {
       const notes = await prisma.note.findMany({
         where: {
           wineId: bottle.wineId,
