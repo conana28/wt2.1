@@ -53,7 +53,7 @@ export async function getConsumedBottles() {
 
 // Fetch all bottles
 export async function getBottlesInCellar() {
-  const bottles = await prisma.bottle.findMany({
+  const bottlesInCellar = await prisma.bottle.findMany({
     where: {
       consume: null,
     },
@@ -76,53 +76,25 @@ export async function getBottlesInCellar() {
     },
   });
 
-  ///////////////
-  // const bottlesWithNoteCount = await Promise.all(
-  //   bottlesInCellar.map(async (bottle: TCBottle) => {
-  //     const notes = await prisma.note.findMany({
-  //       where: {
-  //         wineId: bottle.wineId,
-  //         vintage: bottle.vintage,
-  //       },
-  //     });
-  //     return {
-  //       ...bottle,
-  //       noteCount: notes.length,
-  //     };
-  //   })
-  // );
-
-  // // console.log(bottlesWithNoteCount);
-  // return bottlesWithNoteCount;
-  // // return bottlesInCellar;
-  ////////////////
-
-  // Get number of notes for each bottle
-  const wineIdsAndVintages = bottles.map(({ wineId, vintage }) => ({
-    wineId,
-    vintage,
-  }));
-  const notes = await prisma.note.findMany({
-    where: {
-      wineId: { in: wineIdsAndVintages.map((v) => v.wineId) },
-      vintage: { in: wineIdsAndVintages.map((v) => v.vintage) },
-    },
-  });
-  const notesByWineIdAndVintage = groupBy(
-    notes,
-    (note) => `${note.wineId}-${note.vintage}`
+  const bottlesWithNoteCount = await Promise.all(
+    bottlesInCellar.map(async (bottle: TCBottle) => {
+      const notes = await prisma.note.findMany({
+        where: {
+          wineId: bottle.wineId,
+          vintage: bottle.vintage,
+        },
+      });
+      return {
+        ...bottle,
+        noteCount: notes.length,
+      };
+    })
   );
 
-  const bottlesWithNoteCount = bottles.map((bottle) => ({
-    ...bottle,
-    noteCount:
-      notesByWineIdAndVintage.get(`${bottle.wineId}-${bottle.vintage}`)
-        ?.length ?? 0,
-  }));
-
-  return { bottlesWithNoteCount };
+  // console.log(bottlesWithNoteCount);
+  return bottlesWithNoteCount;
+  // return bottlesInCellar;
 }
-
 // Fetch count of all consumedbottles
 export async function getConsumeBottleCount() {
   const consumeBottleCount = await prisma.bottle.count({
@@ -428,56 +400,50 @@ export async function deleteBottle(id: number) {
 }
 
 export async function searchBottles1(data: Inputs) {
-  console.log(data);
   const result = BottleSearchSchema.safeParse(data);
-  // create a simple groupBy function
-
+  // console.log(data);
   // console.log(result);
   if (!result.success) {
     return { success: false, error: result.error.format() };
   }
-
-  // const countryCondition =
-  //   result.data.country !== ""
-  //     ? {
-  //         country: {
-  //           equals: result.data.country,
-  //           mode: "insensitive",
-  //         } as Prisma.StringFilter<"Wine">, // Cast as StringFilter
-  //       }
-  //     : {};
-
   let whereClause: Prisma.BottleWhereInput = {
     wine: {
       OR: [
         {
           producer: {
-            contains: result.data.search,
+            contains: data.search,
             mode: "insensitive",
           },
         },
         {
           wineName: {
-            contains: result.data.search,
+            contains: data.search,
             mode: "insensitive",
           },
         },
-        // countryCondition, // Use the countryCondition variable
       ],
       AND: [
         {
           country: {
-            contains: result.data.country,
+            contains: data.country,
             mode: "insensitive",
           },
         },
       ],
     },
+
     rack: {
-      contains: result.data.rack,
+      contains: data.rack,
       mode: "insensitive",
     },
-    consume: null,
+
+    // vintage: {
+    //   equals: parseInt(result.data.vintage),
+    // },
+    // You can use "equals" to filter by a specific rack, or "equals" or "in" for an array of racks.
+    consume: {
+      equals: null,
+    },
   };
   if (data.vintage !== "" && data.vintage !== undefined) {
     whereClause.vintage = {
@@ -485,7 +451,6 @@ export async function searchBottles1(data: Inputs) {
     };
   }
   try {
-    console.log(JSON.stringify(whereClause, null, 2));
     const bottles = await prisma.bottle.findMany({
       where: whereClause,
 
@@ -528,51 +493,24 @@ export async function searchBottles1(data: Inputs) {
       console.log("Bottle - Something went wrong");
       return;
     }
-
-    // Get number of notes for each bottle
-    const wineIdsAndVintages = bottles.map(({ wineId, vintage }) => ({
-      wineId,
-      vintage,
-    }));
-    const notes = await prisma.note.findMany({
-      where: {
-        wineId: { in: wineIdsAndVintages.map((v) => v.wineId) },
-        vintage: { in: wineIdsAndVintages.map((v) => v.vintage) },
-      },
-    });
-    const notesByWineIdAndVintage = groupBy(
-      notes,
-      (note) => `${note.wineId}-${note.vintage}`
+    const bottlesWithNoteCount = await Promise.all(
+      bottles.map(async (bottle) => {
+        const notes = await prisma.note.findMany({
+          where: {
+            wineId: bottle.wineId,
+            vintage: bottle.vintage,
+          },
+        });
+        return {
+          ...bottle,
+          noteCount: notes.length,
+        };
+      })
     );
-
-    const bottlesWithNoteCount = bottles.map((bottle) => ({
-      ...bottle,
-      noteCount:
-        notesByWineIdAndVintage.get(`${bottle.wineId}-${bottle.vintage}`)
-          ?.length ?? 0,
-    }));
 
     return { bottlesWithNoteCount };
     // return { bottles };
   } catch (error) {
-    console.log("Error1: ", error);
     return { error };
   }
-}
-
-function groupBy<T>(
-  array: T[],
-  keyGetter: (item: T) => string
-): Map<string, T[]> {
-  const map = new Map<string, T[]>();
-  array.forEach((item) => {
-    const key = keyGetter(item);
-    const collection = map.get(key);
-    if (!collection) {
-      map.set(key, [item]);
-    } else {
-      collection.push(item);
-    }
-  });
-  return map;
 }

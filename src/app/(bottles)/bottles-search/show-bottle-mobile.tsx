@@ -61,7 +61,7 @@ const ShowBottleMobile = ({ bottlesFound }: ShowBottleTableProps) => {
           <Separator className="mb-2" />
           {bottlesFound.map((bottle) => (
             <React.Fragment key={bottle.id}>
-              <div className="text-sm text-slate-400 flex justify-end">
+              <div className="text-md text-slate-400 flex justify-end">
                 <div className="flex-grow">
                   {bottle.wine.producer} {bottle.wine.wineName} {bottle.vintage}{" "}
                   {bottle.rack} {bottle.shelf}{" "}

@@ -19,6 +19,8 @@ import { BottleSearchSchema } from "@/lib/schema";
 import { searchBottles1 } from "@/actions/bottle";
 import { Card } from "@/components/ui/card";
 import { TBottle } from "@/types/bottle";
+import { useEffect, useRef, useState } from "react";
+import { set } from "date-fns";
 
 // pass a prop to the form to set the bottlesFound state in the parent component
 type Props = {
@@ -26,6 +28,24 @@ type Props = {
 };
 
 export function CellarSearchForm({ setBottlesFound }: Props) {
+  const [loading, setLoading] = useState(false);
+  const [secondsElapsed, setSecondsElapsed] = useState(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (loading) {
+      setSecondsElapsed(0);
+      intervalRef.current = setInterval(() => {
+        setSecondsElapsed((seconds) => seconds + 1);
+      }, 100);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    }
+  }, [loading]);
+
   // 1. Define form.
   const form = useForm<z.infer<typeof BottleSearchSchema>>({
     resolver: zodResolver(BottleSearchSchema),
@@ -40,27 +60,38 @@ export function CellarSearchForm({ setBottlesFound }: Props) {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof BottleSearchSchema>) {
     // form.reset();
+    console.log(values);
+    setLoading(true);
     const btls = await searchBottles1(values);
+    console.log(btls);
     if (btls && btls.bottlesWithNoteCount) {
       setBottlesFound(btls.bottlesWithNoteCount);
     }
+    setLoading(false);
   }
 
   function cancel() {
     form.reset();
     setBottlesFound([]);
+    setLoading(false);
+    setSecondsElapsed(0);
   }
 
   return (
     <div className="">
       <Card className="">
         <h1 className="text-base font-semibold ml-4 my-2">Search cellar</h1>
+        {loading && (
+          <div className="text-center text-primary text-xl">
+            Loading...{secondsElapsed}
+          </div>
+        )}
         {/* <Separator className="bg-slate-600 mb-2" /> */}
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-6 px-2"
+            className="space-y-3 md:space-y-6 px-2"
           >
             <FormField
               control={form.control}
@@ -69,7 +100,11 @@ export function CellarSearchForm({ setBottlesFound }: Props) {
                 <FormItem>
                   {/* <FormLabel>Wine</FormLabel> */}
                   <FormControl>
-                    <Input placeholder="Wine name" {...field} />
+                    <Input
+                      placeholder="Wine name"
+                      className="text-lg md:text-sm"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -82,7 +117,11 @@ export function CellarSearchForm({ setBottlesFound }: Props) {
                 <FormItem>
                   {/* <FormLabel>Country</FormLabel> */}
                   <FormControl>
-                    <Input placeholder="Country" {...field} />
+                    <Input
+                      placeholder="Country"
+                      className="text-md md:text-sm"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -95,7 +134,12 @@ export function CellarSearchForm({ setBottlesFound }: Props) {
                 <FormItem>
                   {/* <FormLabel>Vintage</FormLabel> */}
                   <FormControl>
-                    <Input type="number" placeholder="Vintage" {...field} />
+                    <Input
+                      type="number"
+                      placeholder="Vintage"
+                      className="text-lg md:text-sm"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -108,7 +152,11 @@ export function CellarSearchForm({ setBottlesFound }: Props) {
                 <FormItem>
                   {/* <FormLabel>Rack</FormLabel> */}
                   <FormControl>
-                    <Input placeholder="Rack" {...field} />
+                    <Input
+                      placeholder="Rack"
+                      className="text-lg md:text-sm"
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -116,15 +164,10 @@ export function CellarSearchForm({ setBottlesFound }: Props) {
               )}
             />
             <div className="text-center pb-4">
-              <Button
-                variant="outline"
-                type="button"
-                size="xxs"
-                onClick={cancel}
-              >
+              <Button type="button" variant="icon" size="icon" onClick={cancel}>
                 <XCircle />
               </Button>{" "}
-              <Button type="submit" variant="outline" size="xxs">
+              <Button type="submit" variant="icon" size="icon">
                 <Search />
               </Button>
             </div>
