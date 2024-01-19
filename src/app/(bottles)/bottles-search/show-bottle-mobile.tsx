@@ -55,13 +55,13 @@ const ShowBottleMobile = ({ bottlesFound }: ShowBottleTableProps) => {
     <div>
       <ScrollArea className="h-80 w-full rounded-md border mt-4 ">
         <div className="p-4">
-          <h4 className="mb-4 text-sm font-medium leading-none">
+          <h4 className="mb-4 text-md font-medium leading-none">
             {bottlesFound.length} Matching bottles
           </h4>
           <Separator className="mb-2" />
           {bottlesFound.map((bottle) => (
             <React.Fragment key={bottle.id}>
-              <div className="text-md text-slate-400 flex justify-end">
+              <div className="text-lg text-slate-400 flex justify-end">
                 <div className="flex-grow">
                   {bottle.wine.producer} {bottle.wine.wineName} {bottle.vintage}{" "}
                   {bottle.rack} {bottle.shelf}{" "}

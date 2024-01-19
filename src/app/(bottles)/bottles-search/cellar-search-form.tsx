@@ -119,7 +119,7 @@ export function CellarSearchForm({ setBottlesFound }: Props) {
                   <FormControl>
                     <Input
                       placeholder="Country"
-                      className="text-md md:text-sm"
+                      className="text-lg md:text-sm"
                       {...field}
                     />
                   </FormControl>
