@@ -69,4 +69,8 @@ export const columns: ColumnDef<TCBottle>[] = [
     accessorKey: "occasion",
     header: "Occasion",
   },
+  {
+    accessorKey: "id",
+    header: "Id",
+  },
 ];

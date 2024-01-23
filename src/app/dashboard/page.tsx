@@ -200,7 +200,7 @@ const Dashboard = () => {
   return (
     <div className="container">
       {/* {bottles.length === 0 && <div>Loading...</div>} */}
-      <div className="grid lg:grid-cols-4 gap-6 mt-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
         <Card className="bg-slate-400">
           <CardDescription className="text-center text-slate-50">
             Total bottles

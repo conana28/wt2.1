@@ -107,9 +107,10 @@ export function ShowCard({ formType, id }: CharacterDisplayProps) {
             updateBottle={updateBottle}
             addBottle={addBottle}
             deleteBottle={deleteBottle}
-            consumeBottle={function (b: number): void {
-              throw new Error("Function not implemented.");
-            }}
+            consumeBottle={() => {}}
+            // consumeBottle={function (b: number): void {
+            //   throw new Error("Function not implemented.");
+            // }}
           />
         )}
         {formType === "B" && <BottleForm formType="A" id={id} />}
