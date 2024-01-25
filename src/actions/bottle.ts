@@ -76,27 +76,6 @@ export async function getBottlesInCellar() {
     },
   });
 
-  ///////////////
-  // const bottlesWithNoteCount = await Promise.all(
-  //   bottlesInCellar.map(async (bottle: TCBottle) => {
-  //     const notes = await prisma.note.findMany({
-  //       where: {
-  //         wineId: bottle.wineId,
-  //         vintage: bottle.vintage,
-  //       },
-  //     });
-  //     return {
-  //       ...bottle,
-  //       noteCount: notes.length,
-  //     };
-  //   })
-  // );
-
-  // // console.log(bottlesWithNoteCount);
-  // return bottlesWithNoteCount;
-  // // return bottlesInCellar;
-  ////////////////
-
   // Get number of notes for each bottle
   const wineIdsAndVintages = bottles.map(({ wineId, vintage }) => ({
     wineId,
@@ -162,7 +141,6 @@ export async function getBottlesByCountry() {
       },
     },
   });
-  // console.log(bottles);
   return bottles;
 }
 export async function getBottlesByVintage(country: string, vintage: number) {
@@ -260,7 +238,7 @@ type Inputs = z.infer<typeof BottleSearchSchema>;
 
 export async function searchBottles(data: Inputs) {
   const result = BottleSearchSchema.safeParse(data);
-  console.log(result);
+  // console.log(result);
   if (result.success) {
     // console.log(result.data);
     try {
@@ -345,7 +323,7 @@ type In = z.infer<typeof BottleFormSchema1>;
 
 export async function addBottle(data: In, id: number) {
   const result = BottleFormSchema1.safeParse(data);
-  console.log("Parse Bottle", result, "Id", id);
+  // console.log("Parse Bottle", result, "Id", id);
 
   if (result.success) {
     // Add to DB
@@ -371,7 +349,7 @@ export async function addBottle(data: In, id: number) {
 
 export async function updateBottle(data: In, id: number) {
   const result = BottleFormSchema1.safeParse(data);
-  console.log("Parse", result);
+  // console.log("Parse", result);
 
   if (result.success) {
     // Add to DB
@@ -428,11 +406,10 @@ export async function deleteBottle(id: number) {
 }
 
 export async function searchBottles1(data: Inputs) {
-  console.log(data);
+  // console.log(data);
   const result = BottleSearchSchema.safeParse(data);
   // create a simple groupBy function
 
-  // console.log(result);
   if (!result.success) {
     return { success: false, error: result.error.format() };
   }
@@ -485,7 +462,7 @@ export async function searchBottles1(data: Inputs) {
     };
   }
   try {
-    console.log(JSON.stringify(whereClause, null, 2));
+    // console.log(JSON.stringify(whereClause, null, 2));
     const bottles = await prisma.bottle.findMany({
       where: whereClause,
 
@@ -525,7 +502,7 @@ export async function searchBottles1(data: Inputs) {
     });
 
     if (!bottles) {
-      console.log("Bottle - Something went wrong");
+      console.error("Bottle - Something went wrong");
       return;
     }
 
@@ -555,7 +532,7 @@ export async function searchBottles1(data: Inputs) {
     return { bottlesWithNoteCount };
     // return { bottles };
   } catch (error) {
-    console.log("Error1: ", error);
+    console.error("Error1: ", error);
     return { error };
   }
 }

@@ -10,7 +10,7 @@ type Inputs = z.infer<typeof WineSearchSchema>;
 
 export async function searchWines(data: Inputs) {
   const result = WineSearchSchema.safeParse(data);
-  console.log("Parse: ", result);
+  // console.log("Parse: ", result);
   if (result.success) {
     try {
       const wines = await prisma.wine.findMany({
@@ -78,7 +78,7 @@ type In = z.infer<typeof WineFormDataSchema>;
 // Add Wine
 export async function addWine(data: In) {
   const result = WineFormDataSchema.safeParse(data);
-  console.log("Parse", result);
+  // console.log("Parse", result);
 
   if (result.success) {
     // Add to DB

@@ -6,7 +6,7 @@ import ShowTable from "./show-table";
 // which returns the results from the DB
 
 const page = async ({ params }: { params: { search: string } }) => {
-  console.log("params", params.search);
+  // console.log("params", params.search);
   // Get Data from DB
   const result = await searchWines({ search: params.search });
 

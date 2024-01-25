@@ -21,16 +21,32 @@ import { Card } from "@/components/ui/card";
 import { TBottle } from "@/types/bottle";
 import { useEffect, useRef, useState } from "react";
 import { set } from "date-fns";
+import { useRouter } from "next/navigation";
 
 // pass a prop to the form to set the bottlesFound state in the parent component
 type Props = {
   setBottlesFound: React.Dispatch<React.SetStateAction<TBottle[]>>;
+  searchTerm?: string;
 };
 
-export function CellarSearchForm({ setBottlesFound }: Props) {
+export function CellarSearchForm({ setBottlesFound, searchTerm }: Props) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [secondsElapsed, setSecondsElapsed] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  let formDefaultValues = {
+    search: searchTerm ? searchTerm : "",
+    country: "",
+    rack: "",
+    vintage: "", // this is a string but the schema expects a number
+  };
+
+  useEffect(() => {
+    if (searchTerm) {
+      // formDefaultValues.search = searchTerm;
+      onSubmit({ search: searchTerm });
+    }
+  }, []);
 
   useEffect(() => {
     if (loading) {
@@ -49,12 +65,7 @@ export function CellarSearchForm({ setBottlesFound }: Props) {
   // 1. Define form.
   const form = useForm<z.infer<typeof BottleSearchSchema>>({
     resolver: zodResolver(BottleSearchSchema),
-    defaultValues: {
-      search: "",
-      country: "",
-      rack: "",
-      vintage: "", // this is a string but the schema expects a number
-    },
+    defaultValues: formDefaultValues,
   });
 
   // 2. Define a submit handler.
@@ -71,10 +82,20 @@ export function CellarSearchForm({ setBottlesFound }: Props) {
   }
 
   function cancel() {
-    form.reset();
+    // Reset the default values
+    formDefaultValues = {
+      search: "",
+      country: "",
+      rack: "",
+      vintage: "",
+    };
+    // Reset the form with the new default values
+    form.reset(formDefaultValues);
     setBottlesFound([]);
     setLoading(false);
     setSecondsElapsed(0);
+    // Clear the search query parameter from the URL
+    router.push("/bottles-search");
   }
 
   return (
@@ -87,7 +108,6 @@ export function CellarSearchForm({ setBottlesFound }: Props) {
           </div>
         )}
         {/* <Separator className="bg-slate-600 mb-2" /> */}
-
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
