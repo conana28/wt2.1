@@ -283,7 +283,9 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
       {dialogType === "btlAddEdit" && (
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{bottleFormType} Bottle</DialogTitle>
+            <DialogTitle>
+              {bottleFormType === "E" ? "Edit" : "Add"} Bottle
+            </DialogTitle>
             <DialogDescription className="text-primary text-base">
               {bottle.vintage} {bottle.wine.producer} {bottle.wine.wineName}
             </DialogDescription>
@@ -298,7 +300,7 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
           </DialogClose>
         </DialogContent>
       )}
-      {dialogType === "btlAddEdit" && (
+      {/* {dialogType === "btlAddEdit" && (
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{bottleFormType} Bottle</DialogTitle>
@@ -315,7 +317,7 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
             <Button type="button" id="closeDialog" className="hidden"></Button>
           </DialogClose>
         </DialogContent>
-      )}
+      )} */}
       {dialogType === "btlConsume" && (
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

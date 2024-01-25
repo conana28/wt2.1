@@ -44,7 +44,7 @@ export function BottleAddEditForm({
     cost: bottleFormType === "A" ? "" : btl?.cost,
   };
 
-  console.log("BottleAddEditForm ", btl, bottleFormType, defaultValues);
+  // console.log("BottleAddEditForm ", btl, bottleFormType, defaultValues);
   // Define form.
   const form = useForm<BottleFormValues>({
     resolver: zodResolver(BottleFormSchema1),

@@ -30,7 +30,8 @@ const WineSearch = () => {
     if (searchTerm) {
       const s = searchTerm;
       setSearchTerm("");
-      router.push(`/bottles-search?search=${s}`);
+      // router.push(`/bottles-search?search=${s}`);
+      router.push(`/bottles-search/${s}`);
     } else
       toast.info("Please enter a bottle search", {
         position: "top-center",

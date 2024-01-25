@@ -2,32 +2,25 @@
 
 import React, { useEffect, useState } from "react";
 
-import { CellarSearchForm } from "./cellar-search-form";
-import { ShowBottleTable } from "./show-bottle-table";
-import ShowBottleMobile from "./show-bottle-mobile";
+import { CellarSearchForm } from "../cellar-search-form";
+import { ShowBottleTable } from "../show-bottle-table";
+import ShowBottleMobile from "../show-bottle-mobile";
 // import { usePathname, useSearchParams } from "next/navigation";
 
-const BottlesSearch = () => {
-  // const [searchTerm, setSearchTerm] = useState<string>("");
-  // const searchParams = useSearchParams();
-  // const [searchTerm, setSearchTerm] = useState<string>(
-  //   searchParams.get("search") || ""
-  // );
+const BottlesSearch = ({ params }: { params: { search: string } }) => {
+  // console.log("params", params.search);
+  // const [searchTerm, setSearchTerm] = useState<string>(params.search);
   const [bottlesFound, setBottlesFound] = React.useState<any[]>([]);
-  // const pathname = usePathname();
-
-  // useEffect(() => {
-  //   const url = `${pathname}?${searchParams}`;
-  //   console.log(url);
-  //   setSearchTerm(searchParams.get("search") || "");
-  // }, [pathname, searchParams]);
 
   return (
     <div>
       {/* Desktop View */}
       <div className="hidden sm:flex flex-1 space-x-4">
         <div className="w-1/5">
-          <CellarSearchForm setBottlesFound={setBottlesFound} searchTerm="" />
+          <CellarSearchForm
+            setBottlesFound={setBottlesFound}
+            searchTerm={params.search}
+          />
         </div>
 
         <div className="w-4/5">
@@ -39,7 +32,10 @@ const BottlesSearch = () => {
       {/* Mobile View */}
       <div className="w-full md:hidden">
         <div>
-          <CellarSearchForm setBottlesFound={setBottlesFound} searchTerm="" />
+          <CellarSearchForm
+            setBottlesFound={setBottlesFound}
+            searchTerm={params.search}
+          />
         </div>
         {bottlesFound.length > 0 && (
           <div>
