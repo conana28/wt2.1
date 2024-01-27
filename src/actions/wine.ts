@@ -5,6 +5,7 @@ import { WineFormDataSchema, WineSearchSchema } from "@/lib/schema";
 
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { Prisma } from "@prisma/client";
 
 type Inputs = z.infer<typeof WineSearchSchema>;
 
@@ -73,6 +74,95 @@ export async function searchWines(data: Inputs) {
   }
 }
 
+export async function searchWines1(data: Inputs) {
+  // console.log(data);
+  const result = WineSearchSchema.safeParse(data);
+
+  if (!result.success) {
+    return { success: false, error: result.error.format() };
+  }
+
+  let whereClause: Prisma.WineWhereInput = {
+    OR: [
+      {
+        producer: {
+          contains: result.data.search,
+          mode: "insensitive",
+        },
+      },
+      {
+        wineName: {
+          contains: result.data.search,
+          mode: "insensitive",
+        },
+      },
+    ],
+    country: {
+      contains: result.data.country,
+      mode: "insensitive",
+    },
+    region: {
+      contains: result.data.region,
+      mode: "insensitive",
+    },
+  };
+  // as subRegion is optional, only add it to the where clause if it is not empty
+  if (result.data.subRegion !== "") {
+    whereClause.subRegion = {
+      contains: result.data.subRegion,
+      mode: "insensitive",
+    };
+  }
+
+  try {
+    console.log(JSON.stringify(whereClause, null, 2));
+    const wines = await prisma.wine.findMany({
+      where: whereClause,
+      include: {
+        bottle: {
+          where: {
+            consume: {
+              equals: null,
+            },
+          },
+          select: {
+            id: true,
+            vintage: true,
+            rack: true,
+            shelf: true,
+            cost: true,
+            occasion: true,
+            consume: true,
+            createdAt: true,
+            updatedAt: true,
+            wineId: true,
+          },
+        },
+      },
+      orderBy: [
+        {
+          producer: "asc",
+        },
+        {
+          wineName: "asc",
+        },
+      ],
+    });
+
+    if (!wines) {
+      console.error("Wine - Something went wrong");
+      return;
+    }
+
+    // console.log(wines)
+    return { wines };
+  } catch (error) {
+    console.error("Error1: ", error);
+    return { error };
+  }
+}
+
+/////////////////////////////////
 type In = z.infer<typeof WineFormDataSchema>;
 
 // Add Wine

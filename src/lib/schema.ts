@@ -1,13 +1,33 @@
 import { z } from "zod";
 
-export const WineSearchSchema = z.object({
-  //   search: z.string(),
-  search: z.string().nonempty("Search is required."),
-  //   message: z
-  //     .string()
-  //     .nonempty('Message is required.')
-  //     .min(6, { message: 'Message must be at least 6 characters.' })
-});
+// export const WineSearchSchema = z.object({
+//   //   search: z.string(),
+//   search: z.string().nonempty("Search is required."),
+//   //   message: z
+//   //     .string()
+//   //     .nonempty('Message is required.')
+//   //     .min(6, { message: 'Message must be at least 6 characters.' })
+// });
+
+export const WineSearchSchema = z
+  .object({
+    search: z.string().optional(),
+    country: z.string().optional(),
+    region: z.string().optional(),
+    subRegion: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      const values = Object.values(data);
+      return values.some(
+        (value) => value !== "" && value !== null && value !== undefined
+      );
+    },
+    {
+      message: "Must select at least one search criteria",
+      path: ["search"],
+    }
+  );
 
 export const WineFormDataSchema = z.object({
   producer: z.string().min(1, "Producer is required."),

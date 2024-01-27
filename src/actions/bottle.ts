@@ -12,6 +12,19 @@ import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { TBottle, TCBottle } from "@/types/bottle";
 
+// Check if bottle exists with wineId.  Called during wine delete
+export async function checkBottleExists(wineId: number) {
+  const bottle = await prisma.bottle.findFirst({
+    where: {
+      wineId: wineId,
+    },
+  });
+  if (!bottle) {
+    return false;
+  }
+  return true;
+}
+
 // Fetch count of all bottles
 export async function getBottleCount() {
   const bottleCount = await prisma.bottle.count({
@@ -349,7 +362,6 @@ export async function addBottle(data: In, id: number) {
 
 export async function updateBottle(data: In, id: number) {
   const result = BottleFormSchema1.safeParse(data);
-  // console.log("Parse", result);
 
   if (result.success) {
     // Add to DB
@@ -363,9 +375,12 @@ export async function updateBottle(data: In, id: number) {
         occasion: result.data.occasion === "" ? null : result.data.occasion,
         consume: result.data.consume === undefined ? null : result.data.consume,
       },
+      include: {
+        wine: true, // Include the related wine data
+      },
     });
     revalidatePath("/");
-    return { success: true, data: result.data };
+    return { success: true, data: btl };
   }
 }
 export async function consumeBottle(
