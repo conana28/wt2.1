@@ -26,7 +26,7 @@ import { useContext, useState } from "react";
 import { getNotes } from "@/actions/note";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
-import { NoteForm } from "./note-form";
+import { NoteForm } from "./note-add-form";
 import { toast } from "sonner";
 import { BottleAddEditForm } from "./bottle-add-edit-form";
 import { Badge } from "@/components/ui/badge";
@@ -104,6 +104,7 @@ const NoteCell: React.FC<BottleProps> = ({ bottle }) => {
 };
 
 const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
+  // console.log("Passed bottle", bottle);
   const { setBottleToEdit } = useContext(BottlesSearchContext);
   const [notes, setNotes] = useState<TNote[]>([]);
   const [dialogType, setDialogType] = useState("");
@@ -125,6 +126,7 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
   };
   const addNote = async () => {
     setDialogType("add");
+    setBottleToEdit(bottle);
   };
 
   const btlMtce = async () => {
@@ -159,7 +161,6 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
               onClick={() => {
                 setBottleFormType("E");
                 setDialogType("btlAddEdit");
-                setBottleToEdit(bottle);
               }}
             >
               Edit
@@ -415,11 +416,6 @@ export const columns: ColumnDef<TBottle>[] = [
       );
     },
   },
-  // {
-  //   id: "drink",
-  //   header: "Drink",
-  //   accessorFn: (row) => `${row.drinkFrom} ${row.wine.wineName}`,
-  // },
   {
     accessorKey: "id",
     header: "Id",

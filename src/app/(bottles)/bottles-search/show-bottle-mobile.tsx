@@ -26,7 +26,7 @@ import { toast } from "sonner";
 import { BottleAddEditForm } from "./bottle-add-edit-form";
 import { BottleConsumeForm } from "./bottle-consume-form";
 import { BottleDeleteForm } from "./bottle-delete-form";
-import { NoteForm } from "./note-form";
+import { NoteForm } from "./note-add-form";
 import { Button } from "@/components/ui/button";
 import { TNote } from "./columns";
 import { Badge } from "@/components/ui/badge";

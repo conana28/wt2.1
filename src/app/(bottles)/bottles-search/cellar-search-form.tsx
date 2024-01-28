@@ -74,7 +74,7 @@ export function CellarSearchForm({ searchTerm }: Props) {
     console.log(values);
     setLoading(true);
     const btls = await searchBottles1(values);
-    // console.log(btls);
+    console.log(btls);
     if (btls && btls.bottlesWithNoteCount) {
       setBottlesFound(btls.bottlesWithNoteCount);
     }

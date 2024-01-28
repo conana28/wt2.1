@@ -21,6 +21,7 @@ import { useContext } from "react";
 import { Edit } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { addNote } from "@/actions/note";
+import { BottlesSearchContext } from "./page";
 
 type NoteFormValues = z.infer<typeof NoteFormSchema>;
 
@@ -47,6 +48,8 @@ export function NoteForm({
     drinkTo: note?.drinkTo ?? "",
     vintage: vintage,
   };
+  const { bottleToEdit, updateBottlesFoundArray } =
+    useContext(BottlesSearchContext);
   const form = useForm<NoteFormValues>({
     resolver: zodResolver(NoteFormSchema),
     defaultValues,
@@ -54,9 +57,18 @@ export function NoteForm({
 
   async function onSubmit(data: NoteFormValues) {
     console.log("Submit ", data);
+    console.log("Note Count ", bottleToEdit, bottleToEdit?.noteCount);
     let result;
     if (formType === "A") {
       result = await addNote(data, wid);
+      // update WineFoundArray
+      if (result && bottleToEdit && bottleToEdit.id !== undefined) {
+        const updatedBottle = {
+          ...bottleToEdit,
+          noteCount: bottleToEdit.noteCount + 1,
+        };
+        updateBottlesFoundArray!(updatedBottle, "E");
+      }
     } else {
       // result = await updateNote(data, wid);
     }
