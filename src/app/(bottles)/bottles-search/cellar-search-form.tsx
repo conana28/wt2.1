@@ -19,17 +19,17 @@ import { BottleSearchSchema } from "@/lib/schema";
 import { searchBottles1 } from "@/actions/bottle";
 import { Card } from "@/components/ui/card";
 import { TBottle } from "@/types/bottle";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { set } from "date-fns";
 import { useRouter } from "next/navigation";
+import { BottlesSearchContext } from "./page";
 
-// pass a prop to the form to set the bottlesFound state in the parent component
 type Props = {
-  setBottlesFound: React.Dispatch<React.SetStateAction<TBottle[]>>;
   searchTerm?: string;
 };
 
-export function CellarSearchForm({ setBottlesFound, searchTerm }: Props) {
+export function CellarSearchForm({ searchTerm }: Props) {
+  const { setBottlesFound } = useContext(BottlesSearchContext);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [secondsElapsed, setSecondsElapsed] = useState(0);

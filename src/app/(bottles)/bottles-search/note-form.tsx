@@ -65,13 +65,6 @@ export function NoteForm({
       alert("Something went wrong - Add Wine");
       return;
     }
-
-    // if (result.error) {
-    //   // set local error state
-    //   alert(result.error);
-    //   return;
-    // }
-
     form.reset();
     dialogClose();
   }

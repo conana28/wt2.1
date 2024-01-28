@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { updateBottle } from "@/actions/bottle";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -27,6 +27,7 @@ import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 
 import { toast } from "sonner";
+import { BottlesSearchContext } from "./page";
 
 type TBottleConsume = {
   id: number;
@@ -57,6 +58,8 @@ interface BottleFormProps {
 }
 
 export function BottleConsumeForm({ btl, dialogClose }: BottleFormProps) {
+  const { updateBottlesFoundArray } = useContext(BottlesSearchContext);
+
   const defaultValues = {
     vintage: btl.vintage,
     rack: btl.rack,
@@ -76,6 +79,10 @@ export function BottleConsumeForm({ btl, dialogClose }: BottleFormProps) {
     console.log(values);
     if (values.consume !== undefined) {
       const a = await updateBottle(values, btl.id as number);
+      if (a && a.data !== undefined) {
+        const dataWithNoteCount = { ...a.data, noteCount: 0 };
+        updateBottlesFoundArray!(dataWithNoteCount, "D");
+      }
     } else {
       toast.error("Please select a date");
     }

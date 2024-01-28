@@ -15,9 +15,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { deleteBottle } from "@/actions/bottle";
+import { deleteBottle, deleteBottle1 } from "@/actions/bottle";
 
 import { toast } from "sonner";
+import React from "react";
+import { BottlesSearchContext } from "./page";
 
 interface BottleFormProps {
   bid: number;
@@ -25,12 +27,19 @@ interface BottleFormProps {
 }
 
 export function BottleDeleteForm({ bid, dialogClose }: BottleFormProps) {
+  const { updateBottlesFoundArray } = React.useContext(BottlesSearchContext);
+
   // Define form.
   const form = useForm({});
 
   // submit handler.
   async function onSubmit() {
-    const a = await deleteBottle(bid);
+    const a = await deleteBottle1(bid);
+    console.log(a.data);
+    if (a.data && a.data.id !== undefined) {
+      const dataWithNoteCount = { ...a.data, noteCount: 0 };
+      updateBottlesFoundArray!(dataWithNoteCount, "D");
+    }
     form.reset();
     dialogClose();
   }

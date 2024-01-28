@@ -16,6 +16,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { BottleFormSchema1, BottleSearchSchema } from "@/lib/schema";
 import { addBottle, updateBottle } from "@/actions/bottle";
+import React from "react";
+import { BottlesSearchContext } from "./page";
+import { TBottle } from "@/types/bottle";
 
 // type BottleFormValues = z.infer<typeof BottleFormSchema1>;
 type BottleFormValues = {
@@ -43,7 +46,8 @@ export function BottleAddEditForm({
     shelf: bottleFormType === "A" ? "" : btl?.shelf || "",
     cost: bottleFormType === "A" ? "" : btl?.cost,
   };
-
+  const { updateBottlesFoundArray, bottleToEdit } =
+    React.useContext(BottlesSearchContext);
   // console.log("BottleAddEditForm ", btl, bottleFormType, defaultValues);
   // Define form.
   const form = useForm<BottleFormValues>({
@@ -63,9 +67,20 @@ export function BottleAddEditForm({
 
     if (bottleFormType === "E") {
       const a = await updateBottle(formattedValues, btl.id as number);
+      if (a) {
+        const dataWithNoteCount = {
+          ...a.data,
+          noteCount: bottleToEdit!.noteCount,
+        };
+        updateBottlesFoundArray!(dataWithNoteCount, "E");
+      }
     }
     if (bottleFormType === "A") {
       const a = await addBottle(formattedValues, btl.wineId as number);
+      if (a && a.data) {
+        const dataWithNoteCount = { ...a.data, noteCount: 0 };
+        updateBottlesFoundArray!(dataWithNoteCount, "A");
+      }
     }
     form.reset();
     dialogClose();

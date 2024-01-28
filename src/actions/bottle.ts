@@ -11,6 +11,7 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { TBottle, TCBottle } from "@/types/bottle";
+import { tr } from "date-fns/locale";
 
 // Check if bottle exists with wineId.  Called during wine delete
 export async function checkBottleExists(wineId: number) {
@@ -350,6 +351,9 @@ export async function addBottle(data: In, id: number) {
         occasion: result.data.occasion === "" ? null : result.data.occasion,
         wineId: id,
       },
+      include: {
+        wine: true, // Include the related wine data
+      },
     });
     // revalidatePath("/");
     return { success: true, data: wine };
@@ -415,6 +419,37 @@ export async function deleteBottle(id: number) {
     await prisma.bottle.delete({ where: { id } });
     revalidatePath("/");
     return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  }
+}
+
+export async function deleteBottle1(id: number) {
+  console.log("Delete bottle 1", id);
+  try {
+    const d = await prisma.bottle.delete({
+      where: { id },
+      select: {
+        id: true,
+        vintage: true,
+        rack: true,
+        shelf: true,
+        cost: true,
+        wineId: true,
+        consume: true,
+        occasion: true,
+        wine: {
+          select: {
+            producer: true,
+            wineName: true,
+            country: true,
+          },
+        },
+      },
+    });
+    revalidatePath("/");
+    console.log(d);
+    return { success: true, data: d };
   } catch (error) {
     return { success: false, error };
   }

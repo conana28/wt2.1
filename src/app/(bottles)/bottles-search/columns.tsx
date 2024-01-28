@@ -22,7 +22,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { getNotes } from "@/actions/note";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
@@ -33,6 +33,7 @@ import { Badge } from "@/components/ui/badge";
 import { BottleConsumeForm } from "./bottle-consume-form";
 import { BottleDeleteForm } from "./bottle-delete-form";
 import { TBottle } from "@/types/bottle";
+import { BottlesSearchContext } from "./page";
 
 type BottleProps = {
   bottle: TBottle;
@@ -103,6 +104,7 @@ const NoteCell: React.FC<BottleProps> = ({ bottle }) => {
 };
 
 const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
+  const { setBottleToEdit } = useContext(BottlesSearchContext);
   const [notes, setNotes] = useState<TNote[]>([]);
   const [dialogType, setDialogType] = useState("");
   const [bottleFormType, setBottleFormType] = useState("");
@@ -157,6 +159,7 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
               onClick={() => {
                 setBottleFormType("E");
                 setDialogType("btlAddEdit");
+                setBottleToEdit(bottle);
               }}
             >
               Edit
@@ -411,6 +414,15 @@ export const columns: ColumnDef<TBottle>[] = [
         </div>
       );
     },
+  },
+  // {
+  //   id: "drink",
+  //   header: "Drink",
+  //   accessorFn: (row) => `${row.drinkFrom} ${row.wine.wineName}`,
+  // },
+  {
+    accessorKey: "id",
+    header: "Id",
   },
   {
     id: "actions",
