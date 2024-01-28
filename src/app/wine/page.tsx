@@ -160,7 +160,8 @@ const WineSearch = () => {
                 updateBottleArray={updateBottleArray}
               /> */}
               <ShowBottleTable
-                btls={Array.isArray(wine.bottle) ? wine.bottle.flat() : []}
+              // {/* btls={Array.isArray(wine.bottle) ? wine.bottle.flat() : []} */}
+              // wine={wine}
               />
             </div>
           )}

@@ -76,7 +76,11 @@ export function BottleMaintainForm({
     if (bottle) {
       const result = await updateBottle(data, bottle.id); // Update the bottle table
       if (result) {
-        updateBottleArray(result);
+        if (isConsume) {
+          deleteBottleFromBottlesArray(result);
+        } else {
+          updateBottleArray(result);
+        }
       } else {
         alert("Something went wrong - Update Bottle");
       }

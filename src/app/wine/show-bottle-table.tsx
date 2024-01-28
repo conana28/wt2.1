@@ -30,18 +30,25 @@ import {
 } from "@/components/ui/dialog";
 
 interface Props {
-  btls: Bottle[];
+  // btls: Bottle[];
+  // wine: WineData;
+  // onUpdate: (b: any) => void; // callback function to update bottles
 }
 
-function showBottleTable({ btls }: Props) {
+// function showBottleTable({ wine }: Props) {
+function showBottleTable({}: Props) {
   const [openDialog, setOpenDialog] = useState(false); // Btl matce form Dialog open state
   const { setShowAction } = useContext(WineContext);
   const [btl, setBtl] = useState<Bottle | null>(null); // Bottle to be maintained
-  const [bottles, setBottles] = useState<Bottle[]>(btls); // Bottles array to be displayed
+  const [bottles, setBottles] = useState<Bottle[] | []>([]);
+  const { wine } = useContext(WineContext);
 
   useEffect(() => {
-    console.log("UE", bottles);
-  }, [bottles]);
+    console.log("Wine:", wine);
+    if (wine.bottle) {
+      setBottles(wine.bottle as Bottle[]); // Asserts type, use with caution
+    }
+  }, [wine.bottle]);
   // Call back to update the bottles array when a bottle is updated
   function updateBottleArray(response: { success: boolean; data: Bottle }) {
     console.log("Response:", response);
@@ -162,12 +169,16 @@ function showBottleTable({ btls }: Props) {
       </Card>
 
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="w-11/12 sm:max-w-xs">
           <DialogHeader>
-            <DialogTitle>Maintain bottle id: {btl?.id} </DialogTitle>
+            <DialogTitle className="text-sm">
+              Maintain bottle id: {btl?.id}{" "}
+            </DialogTitle>
           </DialogHeader>
           <DialogDescription>
-            <p className="text-sm">{btl?.vintage}</p>
+            <p className="text-sm">
+              {wine.producer} {wine.wineName}{" "}
+            </p>
           </DialogDescription>
 
           <div className="flex items-center space-x-2">
