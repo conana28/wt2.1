@@ -23,14 +23,26 @@ import { searchWines, searchWines1 } from "@/actions/wine";
 import { WineContext } from "@/app/contexts/WineContext";
 
 // pass a prop to the form to set the bottlesFound state in the parent component
+// type Props = {
+//   setWinesFound: React.Dispatch<React.SetStateAction<any[]>>;
+//   searchTerm?: string;
+// };
+
 type Props = {
-  setWinesFound: React.Dispatch<React.SetStateAction<any[]>>;
+  // winesFound: any[];
+  // onWinesFoundChange: (newWinesFound: any[]) => void;
   searchTerm?: string;
 };
 
-export function WineSearchForm({ setWinesFound, searchTerm }: Props) {
+// export function WineSearchForm({ setWinesFound, searchTerm }: Props) {
+export function WineSearchForm({
+  // winesFound,
+  // onWinesFoundChange,
+  searchTerm,
+}: Props) {
+  // ... existing code ...
   const router = useRouter();
-  const { setShowAction } = useContext(WineContext);
+  const { setShowAction, winesFound, setWinesFound } = useContext(WineContext);
   const [loading, setLoading] = useState(false);
   const [secondsElapsed, setSecondsElapsed] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -79,6 +91,8 @@ export function WineSearchForm({ setWinesFound, searchTerm }: Props) {
       return;
     }
     console.log(result);
+    // setWinesFound(result?.wines);
+    // When you want to update winesFound, call onWinesFoundChange instead of setWinesFound
     setWinesFound(result?.wines);
     setLoading(false);
   }
@@ -94,6 +108,7 @@ export function WineSearchForm({ setWinesFound, searchTerm }: Props) {
     // Reset the form with the new default values
     form.reset(formDefaultValues);
     setWinesFound([]);
+    // onWinesFoundChange([]);
     setShowAction("");
     setLoading(false);
     setSecondsElapsed(0);

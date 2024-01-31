@@ -19,6 +19,8 @@ interface TFOContext {
   setShowAction: Dispatch<SetStateAction<string>>;
   wine: WineData;
   setWine: Dispatch<SetStateAction<WineData>>;
+  winesFound: WineData[];
+  setWinesFound: Dispatch<SetStateAction<WineData[]>>;
 }
 
 export const WineContext = createContext<TFOContext>({
@@ -26,4 +28,6 @@ export const WineContext = createContext<TFOContext>({
   setShowAction: () => "",
   wine: wineEmpty,
   setWine: () => {},
+  winesFound: [],
+  setWinesFound: () => {},
 });

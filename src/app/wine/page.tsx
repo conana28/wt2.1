@@ -17,13 +17,6 @@ import ShowBottleTable from "./show-bottle-table";
 
 import { WineContext } from "../contexts/WineContext";
 
-// type TFOContext = {
-//   showAction: string;
-//   setShowAction: (show: string) => void;
-//   wine: WineData;
-//   setWine: (wine: WineData) => void;
-// };
-
 const wineEmpty: WineData = {
   id: 0,
   producer: "",
@@ -35,13 +28,6 @@ const wineEmpty: WineData = {
   notes: "",
   bottle: [],
 };
-
-// export const WineContext = createContext<TFOContext>({
-//   showAction: "",
-//   setShowAction: () => "",
-//   wine: wineEmpty,
-//   setWine: () => {},
-// });
 
 const WineSearch = () => {
   const [winesFound, setWinesFound] = React.useState<WineData[]>([]);
@@ -109,13 +95,29 @@ const WineSearch = () => {
   };
 
   return (
-    <WineContext.Provider value={{ showAction, setShowAction, wine, setWine }}>
+    <WineContext.Provider
+      value={{
+        showAction,
+        setShowAction,
+        wine,
+        setWine,
+        winesFound,
+        setWinesFound,
+      }}
+    >
       <div>
         {/* Desktop View */}
         <div className="hidden sm:flex flex-1 space-x-2">
           {/* Col 1 - Search Wines Form */}
           <div className={`w-2/12 ${showAction !== "" ? "opacity-50" : ""}`}>
-            <WineSearchForm setWinesFound={setWinesFound} searchTerm="" />
+            {/* <WineSearchForm setWinesFound={setWinesFound} searchTerm="" /> */}
+
+            <WineSearchForm
+              // winesFound={winesFound}
+              // onWinesFoundChange={setWinesFound}
+              searchTerm="some search term"
+            />
+
             {winesFound.length > 0 && (
               <p className="text-xs ml-4 mt-2">
                 {winesFound.length} Matching wines
