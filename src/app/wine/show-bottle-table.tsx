@@ -18,7 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { WineContext } from "./page";
+import { WineContext } from "@/app/contexts/WineContext";
 import { Button } from "@/components/ui/button";
 import { BottleMaintainForm } from "./bottle-maintain-form";
 import {
@@ -32,44 +32,28 @@ import {
 interface Props {
   // btls: Bottle[];
   // wine: WineData;
-  // onUpdate: (b: any) => void; // callback function to update bottles
+  // onUpdate: (b: any) => void; // callback function to update wines array
 }
 
-// function showBottleTable({ wine }: Props) {
-function showBottleTable({}: Props) {
-  const [openDialog, setOpenDialog] = useState(false); // Btl matce form Dialog open state
+function ShowBottleTable({}: Props) {
+  const [openDialog, setOpenDialog] = useState(false); // Btl mtce form Dialog open state
   const { setShowAction } = useContext(WineContext);
   const [btl, setBtl] = useState<Bottle | null>(null); // Bottle to be maintained
-  const [bottles, setBottles] = useState<Bottle[] | []>([]);
-  const { wine } = useContext(WineContext);
+  const { wine } = useContext(WineContext); // Wine to be used for actions
+  // Because I check for wine.bottle before calling I don't need to check for null here
+  const [bottles, setBottles] = useState<Bottle[]>(wine.bottle as Bottle[]); // Bottles array to be displayed
 
-  useEffect(() => {
-    console.log("Wine:", wine);
-    if (wine.bottle) {
-      setBottles(wine.bottle as Bottle[]); // Asserts type, use with caution
-    }
-  }, [wine.bottle]);
   // Call back to update the bottles array when a bottle is updated
   function updateBottleArray(response: { success: boolean; data: Bottle }) {
-    console.log("Response:", response);
-
     if (response.success) {
       const updatedBottle = response.data;
-
       setBottles((prevBottles) => {
-        // Find the index of the bottle to update
         const index = prevBottles.findIndex(
+          // Find the index of the bottle to update
           (bottle) => bottle.id === updatedBottle.id
         );
-
-        console.log("Index:", index);
-
-        // Create a new array with the updated bottle
-        const newBottles = [...prevBottles];
+        const newBottles = [...prevBottles]; // Create a new array with the updated bottle
         newBottles[index] = updatedBottle;
-
-        console.log("New bottles:", newBottles);
-
         return newBottles;
       });
     }
@@ -80,17 +64,11 @@ function showBottleTable({}: Props) {
     success: boolean;
     data: Bottle;
   }) {
-    console.log("Ad Response:", response);
-
     if (response.success) {
       const newBottle = response.data;
-
       setBottles((prevBottles) => {
         // Create a new array with the updated bottle
         const newBottles = [...prevBottles, newBottle];
-
-        console.log("New bottles:", newBottles);
-
         return newBottles;
       });
     }
@@ -117,7 +95,7 @@ function showBottleTable({}: Props) {
         <CardHeader>
           <CardTitle>Bottles</CardTitle>
           <CardDescription>
-            {/* {wine.producer} {wine.wineName}{" "} */}
+            {wine.producer} {wine.wineName}{" "}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -196,4 +174,4 @@ function showBottleTable({}: Props) {
   );
 }
 
-export default showBottleTable;
+export default ShowBottleTable;

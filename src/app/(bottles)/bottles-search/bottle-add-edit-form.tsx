@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { BottleFormSchema1, BottleSearchSchema } from "@/lib/schema";
 import { addBottle, updateBottle } from "@/actions/bottle";
 import React from "react";
-import { BottlesSearchContext } from "./page";
+import { BottlesSearchContext } from "../../contexts/BottlesSearchContext";
 import { TBottle } from "@/types/bottle";
 
 // type BottleFormValues = z.infer<typeof BottleFormSchema1>;
@@ -29,26 +29,34 @@ type BottleFormValues = {
 };
 
 interface BottleFormProps {
-  btl: any | null;
+  // btl: any | null;
   dialogClose: () => void;
   bottleFormType: string;
 }
 
 export function BottleAddEditForm({
-  btl,
+  // btl,
   dialogClose,
   bottleFormType,
 }: BottleFormProps) {
-  console.log(btl, bottleFormType);
-  const defaultValues = {
-    vintage: bottleFormType === "A" ? "2020" : btl?.vintage,
-    rack: bottleFormType === "A" ? "" : btl?.rack,
-    shelf: bottleFormType === "A" ? "" : btl?.shelf || "",
-    cost: bottleFormType === "A" ? "" : btl?.cost,
-  };
   const { updateBottlesFoundArray, bottleToEdit } =
     React.useContext(BottlesSearchContext);
-  // console.log("BottleAddEditForm ", btl, bottleFormType, defaultValues);
+  console.log(bottleToEdit, bottleFormType);
+  const defaultValues = {
+    vintage: bottleFormType === "A" ? "2020" : bottleToEdit?.vintage.toString(),
+    rack: bottleFormType === "A" ? "" : bottleToEdit?.rack,
+    shelf: bottleFormType === "A" ? "" : bottleToEdit?.shelf || "",
+    cost: bottleFormType === "A" ? "" : bottleToEdit?.cost?.toString(),
+  };
+
+  console.log(
+    "BottleAddEditForm ",
+    bottleToEdit,
+    // "btl = ",
+    // btl,
+    bottleFormType,
+    defaultValues
+  );
   // Define form.
   const form = useForm<BottleFormValues>({
     resolver: zodResolver(BottleFormSchema1),
@@ -66,7 +74,7 @@ export function BottleAddEditForm({
     };
 
     if (bottleFormType === "E") {
-      const a = await updateBottle(formattedValues, btl.id as number);
+      const a = await updateBottle(formattedValues, bottleToEdit!.id as number);
       if (a) {
         const dataWithNoteCount = {
           ...a.data,
@@ -76,7 +84,10 @@ export function BottleAddEditForm({
       }
     }
     if (bottleFormType === "A") {
-      const a = await addBottle(formattedValues, btl.wineId as number);
+      const a = await addBottle(
+        formattedValues,
+        bottleToEdit!.wineId as number
+      );
       if (a && a.data) {
         const dataWithNoteCount = { ...a.data, noteCount: 0 };
         updateBottlesFoundArray!(dataWithNoteCount, "A");

@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 
-import { WineContext } from "./page";
+import { WineContext } from "@/app/contexts/WineContext";
 import { Button } from "@/components/ui/button";
 import { deleteWine } from "@/actions/wine";
 import {

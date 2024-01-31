@@ -8,19 +8,21 @@ import ShowTable1 from "./show-table1"; // Show wines matching search criteria
 import { WineData } from "./columns";
 // Col 3 - From Action Menu
 import WineAddEditForm from "./wine-add-edit-form"; //Add/Edit Wine Form
-import ShowBottles from "./show-bottles"; // Show bottles for a wine
+// import ShowBottles from "./show-bottles"; // Show bottles for a wine
 import ShowNotes from "./show-notes"; // Show notes for a wine
 import DeleteWine from "./delete-wine";
 import { BottleAddForm } from "./bottle-add-form";
 import { Bottle } from "@prisma/client";
 import ShowBottleTable from "./show-bottle-table";
 
-type TFOContext = {
-  showAction: string;
-  setShowAction: (show: string) => void;
-  wine: WineData;
-  setWine: (wine: WineData) => void;
-};
+import { WineContext } from "../contexts/WineContext";
+
+// type TFOContext = {
+//   showAction: string;
+//   setShowAction: (show: string) => void;
+//   wine: WineData;
+//   setWine: (wine: WineData) => void;
+// };
 
 const wineEmpty: WineData = {
   id: 0,
@@ -34,12 +36,12 @@ const wineEmpty: WineData = {
   bottle: [],
 };
 
-export const WineContext = createContext<TFOContext>({
-  showAction: "",
-  setShowAction: () => "",
-  wine: wineEmpty,
-  setWine: () => {},
-});
+// export const WineContext = createContext<TFOContext>({
+//   showAction: "",
+//   setShowAction: () => "",
+//   wine: wineEmpty,
+//   setWine: () => {},
+// });
 
 const WineSearch = () => {
   const [winesFound, setWinesFound] = React.useState<WineData[]>([]);

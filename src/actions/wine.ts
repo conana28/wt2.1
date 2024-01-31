@@ -115,7 +115,7 @@ export async function searchWines1(data: Inputs) {
   }
 
   try {
-    console.log(JSON.stringify(whereClause, null, 2));
+    // console.log(JSON.stringify(whereClause, null, 2));
     const wines = await prisma.wine.findMany({
       where: whereClause,
       include: {

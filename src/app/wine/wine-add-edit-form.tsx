@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { WineFormDataSchema } from "@/lib/schema";
 import { addWine, updateWine } from "@/actions/wine";
 import { useContext } from "react";
-import { WineContext } from "./page";
+import { WineContext } from "@/app/contexts/WineContext";
 import { Edit } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { WineData } from "./columns";

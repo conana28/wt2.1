@@ -22,7 +22,7 @@ import { TBottle } from "@/types/bottle";
 import { useContext, useEffect, useRef, useState } from "react";
 import { set } from "date-fns";
 import { useRouter } from "next/navigation";
-import { BottlesSearchContext } from "./page";
+import { BottlesSearchContext } from "../../contexts/BottlesSearchContext";
 
 type Props = {
   searchTerm?: string;
@@ -41,12 +41,12 @@ export function CellarSearchForm({ searchTerm }: Props) {
     vintage: "", // this is a string but the schema expects a number
   };
 
-  useEffect(() => {
-    if (searchTerm) {
-      // formDefaultValues.search = searchTerm;
-      onSubmit({ search: searchTerm });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (searchTerm) {
+  //     // formDefaultValues.search = searchTerm;
+  //     onSubmit({ search: searchTerm });
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (loading) {

@@ -33,21 +33,27 @@ import { Badge } from "@/components/ui/badge";
 import { BottleConsumeForm } from "./bottle-consume-form";
 import { BottleDeleteForm } from "./bottle-delete-form";
 import { TBottle } from "@/types/bottle";
-import { BottlesSearchContext } from "./page";
+import { BottlesSearchContext } from "../../contexts/BottlesSearchContext";
+import React from "react";
 
-type BottleProps = {
+// type BottleProps = {
+//   bottle: TBottle;
+// };
+
+interface BottleProps {
   bottle: TBottle;
-};
+}
 
 const NoteCell: React.FC<BottleProps> = ({ bottle }) => {
   const [notes, setNotes] = useState<TNote[]>([]);
-  const [dialogType, setDialogType] = useState("");
+  // const [dialogType, setDialogType] = useState("");
   const fetchNotes = async () => {
     const response = await getNotes(bottle.wineId, bottle.vintage);
     console.log(response);
     setNotes(response);
-    setDialogType("show");
+    // setDialogType("show");
   };
+
   return (
     bottle.noteCount > 0 && (
       <>
@@ -81,14 +87,6 @@ const NoteCell: React.FC<BottleProps> = ({ bottle }) => {
                 ))}
               </ScrollArea>
             )}
-            {notes.length === 0 && (
-              <Card>
-                <CardContent className="text-center ">
-                  <p className="mt-6">No notes found for this wine</p>
-                </CardContent>
-              </Card>
-            )}
-            {/* </div> */}
             <DialogFooter className="sm:justify-start">
               <DialogClose asChild>
                 <Button type="button" size="xs" variant="secondary">
@@ -104,35 +102,10 @@ const NoteCell: React.FC<BottleProps> = ({ bottle }) => {
 };
 
 const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
-  // console.log("Passed bottle", bottle);
   const { setBottleToEdit } = useContext(BottlesSearchContext);
-  const [notes, setNotes] = useState<TNote[]>([]);
+  // const [notes, setNotes] = useState<TNote[]>([]);
   const [dialogType, setDialogType] = useState("");
-  const [bottleFormType, setBottleFormType] = useState("");
-  const titles = {
-    E: "Edit",
-    A: "Add",
-    D: "Delete",
-    C: "Consume",
-  };
-  const [openDialog, setOpenDialog] = useState(false);
-
-  const fetchNotes = async () => {
-    const response = await getNotes(bottle.wineId, bottle.vintage);
-    console.log(response);
-    setNotes(response);
-    setDialogType("show");
-    // setOpen(true);
-  };
-  const addNote = async () => {
-    setDialogType("add");
-    setBottleToEdit(bottle);
-  };
-
-  const btlMtce = async () => {
-    console.log("btlMtce");
-    setDialogType("btlMtce");
-  };
+  const [bottleFormType, setBottleFormType] = useState(""); // A=Add or E=Edit
   const dialogClose = () => {
     setBottleFormType("");
     setDialogType("");
@@ -140,27 +113,22 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
   };
 
   return (
-    // <Dialog open={openDialog} onOpenChange={setOpenDialog}>
     <Dialog>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
-            <MoreHorizontal
-              className="h-4 w-4"
-              onClick={() => setOpenDialog(true)}
-            />
+            <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end">
-          {/* <DropdownMenuLabel>Bottles</DropdownMenuLabel>
-          <DropdownMenuSeparator /> */}
           {/* Edit Bottle Maintenace */}
           <DialogTrigger asChild>
             <DropdownMenuItem
               onClick={() => {
                 setBottleFormType("E");
                 setDialogType("btlAddEdit");
+                setBottleToEdit(bottle);
               }}
             >
               Edit
@@ -172,6 +140,7 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
               onClick={() => {
                 setBottleFormType("A");
                 setDialogType("btlAddEdit");
+                setBottleToEdit(bottle);
               }}
             >
               Add
@@ -180,8 +149,9 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
           <DialogTrigger asChild>
             <DropdownMenuItem
               onClick={() => {
-                setBottleFormType("C");
+                // setBottleFormType("C");
                 setDialogType("btlConsume");
+                setBottleToEdit(bottle);
               }}
             >
               Consume
@@ -190,8 +160,8 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
           <DialogTrigger asChild>
             <DropdownMenuItem
               onClick={() => {
-                // setBottleFormType("D");
                 setDialogType("btlDelete");
+                setBottleToEdit(bottle); // Store the btl to edit in context
               }}
             >
               Delete
@@ -200,14 +170,18 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
           <DropdownMenuSeparator />
           {/* Add Note */}
           <DialogTrigger asChild>
-            <DropdownMenuItem onClick={addNote}>Add note</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                setDialogType("noteAdd");
+                setBottleToEdit(bottle); // Store the btl to edit in context
+              }}
+            >
+              Add note
+            </DropdownMenuItem>
           </DialogTrigger>
+
           <DropdownMenuSeparator />
 
-          {/* Bottle Maintenace */}
-          <DialogTrigger asChild>
-            <DropdownMenuItem onClick={btlMtce}>Btl mtce.</DropdownMenuItem>
-          </DialogTrigger>
           {/* Show Notes Id */}
           <DropdownMenuItem
             onClick={() =>
@@ -221,49 +195,7 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {dialogType === "show" && (
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Notes</DialogTitle>
-            <DialogDescription className="text-primary text-base">
-              {bottle.vintage} {bottle.wine.producer} {bottle.wine.wineName}
-            </DialogDescription>
-          </DialogHeader>
-          {/* <div className="flex items-center space-x-2"> */}
-          {notes.length > 0 && (
-            <ScrollArea className="h-96">
-              {notes.map((note) => (
-                <Card key={note.id}>
-                  <CardContent>
-                    <p>
-                      {note.author} {note.rating}
-                    </p>
-                    {note.noteText}
-                    {note.drinkFrom ? ` From ${note.drinkFrom}` : ""}
-                    {note.drinkTo ? ` To ${note.drinkTo}` : ""}
-                  </CardContent>
-                </Card>
-              ))}
-            </ScrollArea>
-          )}
-          {notes.length === 0 && (
-            <Card>
-              <CardContent className="text-center ">
-                <p className="mt-6">No notes found for this wine</p>
-              </CardContent>
-            </Card>
-          )}
-          {/* </div> */}
-          <DialogFooter className="sm:justify-start">
-            <DialogClose asChild>
-              <Button type="button" size="xs" variant="secondary">
-                Close
-              </Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      )}
-      {dialogType === "add" && (
+      {dialogType === "noteAdd" && (
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Add Note</DialogTitle>
@@ -295,7 +227,6 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
             </DialogDescription>
           </DialogHeader>
           <BottleAddEditForm
-            btl={bottle}
             dialogClose={dialogClose}
             bottleFormType={bottleFormType}
           />
@@ -304,24 +235,6 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
           </DialogClose>
         </DialogContent>
       )}
-      {/* {dialogType === "btlAddEdit" && (
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>{bottleFormType} Bottle</DialogTitle>
-            <DialogDescription className="text-primary text-base">
-              {bottle.vintage} {bottle.wine.producer} {bottle.wine.wineName}
-            </DialogDescription>
-          </DialogHeader>
-          <BottleAddEditForm
-            btl={bottle}
-            dialogClose={dialogClose}
-            bottleFormType={bottleFormType}
-          />
-          <DialogClose asChild>
-            <Button type="button" id="closeDialog" className="hidden"></Button>
-          </DialogClose>
-        </DialogContent>
-      )} */}
       {dialogType === "btlConsume" && (
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -331,11 +244,11 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
             </DialogDescription>
           </DialogHeader>
           <BottleConsumeForm
-            btl={{
-              ...bottle,
-              occasion: bottle.occasion || undefined,
-              consume: bottle.consume || undefined,
-            }}
+            // btl={{
+            //   ...bottle,
+            //   occasion: bottle.occasion || undefined,
+            //   consume: bottle.consume || undefined,
+            // }}
             dialogClose={dialogClose}
           />
           {/* <BottleConsumeForm btl={bottle} dialogClose={dialogClose} /> */}
@@ -347,12 +260,13 @@ const ActionCell: React.FC<BottleProps> = ({ bottle }) => {
       {dialogType === "btlDelete" && (
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{bottleFormType} Bottle - delete</DialogTitle>
+            <DialogTitle>Bottle - delete</DialogTitle>
             <DialogDescription className="text-primary text-base">
               {bottle.vintage} {bottle.wine.producer} {bottle.wine.wineName}
             </DialogDescription>
           </DialogHeader>
-          <BottleDeleteForm bid={bottle.id} dialogClose={dialogClose} />
+          {/* <BottleDeleteForm bid={bottle.id} dialogClose={dialogClose} /> */}
+          <BottleDeleteForm dialogClose={dialogClose} />
           <DialogClose asChild>
             <Button type="button" id="closeDialog" className="hidden"></Button>
           </DialogClose>

@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { BottleFormSchema1 } from "@/lib/schema";
 import { useContext, useState } from "react";
-import { WineContext } from "./page";
+import { WineContext } from "@/app/contexts/WineContext";
 import { addBottle, updateBottle, deleteBottle } from "@/actions/bottle";
 import { Bottle } from "@prisma/client";
 import { X, Trash2, Plus, PocketKnifeIcon, CalendarIcon } from "lucide-react";

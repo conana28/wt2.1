@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { BottleFormSchema } from "@/lib/schema";
 import { useContext } from "react";
-import { WineContext } from "./page";
+import { WineContext } from "@/app/contexts/WineContext";
 import { addBottle } from "@/actions/bottle";
 
 type BottleFormValues = z.infer<typeof BottleFormSchema>;

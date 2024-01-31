@@ -4,30 +4,30 @@ import React, { createContext } from "react";
 
 import { CellarSearchForm } from "./cellar-search-form";
 import { ShowBottleTable } from "./show-bottle-table";
-import ShowBottleMobile from "./show-bottle-mobile";
 import { TBottle } from "@/types/bottle";
+import { BottlesSearchContext } from "../../contexts/BottlesSearchContext";
+// type BottlesSearchContextType = {
+//   bottlesFound: TBottle[];
+//   setBottlesFound: (bottles: TBottle[]) => void;
+//   updateBottlesFoundArray: (bottle: TBottle, action: Action) => void;
+//   bottleToEdit: TBottle | undefined;
+//   setBottleToEdit: (bottle: TBottle | undefined) => void;
+// };
 
-type TBSContext = {
-  bottlesFound: TBottle[];
-  setBottlesFound: (bottles: TBottle[]) => void;
-  updateBottlesFoundArray?: (bottle: TBottle, action: Action) => void;
-  bottleToEdit: TBottle | undefined;
-  setBottleToEdit: (bottle: TBottle) => void;
-};
-
-export const BottlesSearchContext = createContext<TBSContext>({
-  bottlesFound: [],
-  setBottlesFound: () => {},
-  updateBottlesFoundArray: () => {},
-  bottleToEdit: {} as TBottle,
-  setBottleToEdit: () => {},
-});
+// export const BottlesSearchContext = createContext<BottlesSearchContextType>({
+//   bottlesFound: [],
+//   setBottlesFound: () => {},
+//   updateBottlesFoundArray: () => {},
+//   bottleToEdit: undefined,
+//   setBottleToEdit: () => {},
+// });
 
 type Action = "E" | "A" | "D";
 
 const BottlesSearch = () => {
   const [bottlesFound, setBottlesFound] = React.useState<TBottle[]>([]);
-  const [bottleToEdit, setBottleToEdit] = React.useState<TBottle>();
+  const [bottleToEdit, setBottleToEdit] = React.useState<TBottle | undefined>();
+
   const updateBottlesFoundArray = (updatedBottle: TBottle, action: Action) => {
     console.log(action, updatedBottle);
     const bottleExists = bottlesFound.some(
@@ -70,34 +70,6 @@ const BottlesSearch = () => {
 
       setBottlesFound(updatedBottles);
     }
-
-    // if (wineExists) {
-    //   // If the wine exists, update it
-    //   setWinesFound(
-    //     winesFound
-    //       .map((wine) => (wine.id === updatedWine.id ? updatedWine : wine))
-    //       .sort((a, b) => {
-    //         // Sort by producer
-    //         const producerComparison = a.producer.localeCompare(b.producer);
-    //         if (producerComparison !== 0) return producerComparison;
-
-    //         // If producers are the same, sort by wineName
-    //         return a.wineName.localeCompare(b.wineName);
-    //       })
-    //   );
-    // } else {
-    //   // If the wine doesn't exist, add it
-    //   setWinesFound(
-    //     [...winesFound, updatedWine].sort((a, b) => {
-    //       // Sort by producer
-    //       const producerComparison = a.producer.localeCompare(b.producer);
-    //       if (producerComparison !== 0) return producerComparison;
-
-    //       // If producers are the same, sort by wineName
-    //       return a.wineName.localeCompare(b.wineName);
-    //     })
-    //   );
-    // }
   };
 
   return (
@@ -123,13 +95,9 @@ const BottlesSearch = () => {
         </div>
         {/* Mobile View */}
         <div className="w-full md:hidden">
-          <div>
-            {/* <CellarSearchForm setBottlesFound={setBottlesFound} searchTerm="" /> */}
-          </div>
+          <div></div>
           {bottlesFound.length > 0 && (
-            <div>
-              <ShowBottleMobile bottlesFound={bottlesFound} />
-            </div>
+            <div>{/* <ShowBottleMobile bottlesFound={bottlesFound} /> */}</div>
           )}
         </div>
       </div>

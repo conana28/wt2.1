@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { updateBottle } from "@/actions/bottle";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import {
   Popover,
   PopoverContent,
@@ -25,17 +25,16 @@ import {
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
-
 import { toast } from "sonner";
-import { BottlesSearchContext } from "./page";
+import { BottlesSearchContext } from "../../contexts/BottlesSearchContext";
 
-type TBottleConsume = {
-  id: number;
-  vintage: number;
-  rack: string;
-  consume?: Date;
-  occasion?: string;
-};
+// type TBottleConsume = {
+//   id: number;
+//   vintage: number;
+//   rack: string;
+//   consume?: Date;
+//   occasion?: string;
+// };
 
 // make zod schema for form.
 const BottleFormSchema = z.object({
@@ -53,19 +52,19 @@ const BottleFormSchema = z.object({
 type BottleFormValues = z.infer<typeof BottleFormSchema>;
 
 interface BottleFormProps {
-  btl: TBottleConsume;
+  // btl: TBottleConsume;
   dialogClose: () => void;
 }
 
-export function BottleConsumeForm({ btl, dialogClose }: BottleFormProps) {
-  const { updateBottlesFoundArray } = useContext(BottlesSearchContext);
+export function BottleConsumeForm({ dialogClose }: BottleFormProps) {
+  const { updateBottlesFoundArray, bottleToEdit } =
+    useContext(BottlesSearchContext);
 
   const defaultValues = {
-    vintage: btl.vintage,
-    rack: btl.rack,
+    vintage: bottleToEdit!.vintage,
+    rack: bottleToEdit!.rack,
     consume: undefined,
     occasion: undefined,
-    // consume: new Date(),
   };
 
   // Define form.
@@ -78,7 +77,7 @@ export function BottleConsumeForm({ btl, dialogClose }: BottleFormProps) {
   async function onSubmit(values: BottleFormValues) {
     console.log(values);
     if (values.consume !== undefined) {
-      const a = await updateBottle(values, btl.id as number);
+      const a = await updateBottle(values, bottleToEdit!.id as number);
       if (a && a.data !== undefined) {
         const dataWithNoteCount = { ...a.data, noteCount: 0 };
         updateBottlesFoundArray!(dataWithNoteCount, "D");

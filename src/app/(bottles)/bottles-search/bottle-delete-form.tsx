@@ -19,22 +19,24 @@ import { deleteBottle, deleteBottle1 } from "@/actions/bottle";
 
 import { toast } from "sonner";
 import React from "react";
-import { BottlesSearchContext } from "./page";
+import { BottlesSearchContext } from "../../contexts/BottlesSearchContext";
 
 interface BottleFormProps {
-  bid: number;
+  // bid: number;
   dialogClose: () => void;
 }
 
-export function BottleDeleteForm({ bid, dialogClose }: BottleFormProps) {
-  const { updateBottlesFoundArray } = React.useContext(BottlesSearchContext);
+// export function BottleDeleteForm({ bid, dialogClose }: BottleFormProps) {
+export function BottleDeleteForm({ dialogClose }: BottleFormProps) {
+  const { updateBottlesFoundArray, bottleToEdit } =
+    React.useContext(BottlesSearchContext);
 
   // Define form.
   const form = useForm({});
 
   // submit handler.
   async function onSubmit() {
-    const a = await deleteBottle1(bid);
+    const a = await deleteBottle1(bottleToEdit!.id);
     console.log(a.data);
     if (a.data && a.data.id !== undefined) {
       const dataWithNoteCount = { ...a.data, noteCount: 0 };
@@ -54,7 +56,7 @@ export function BottleDeleteForm({ bid, dialogClose }: BottleFormProps) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="text-base font-medium text-gray-300">
-          [{bid}] This cannot be undone
+          [{bottleToEdit!.id}] This cannot be undone
         </div>
         <div className="flex items-center justify-end space-x-4">
           <Button variant="destructive" size="xs" type="submit">

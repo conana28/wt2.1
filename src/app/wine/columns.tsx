@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { WineContext } from "./page";
+import { WineContext } from "@/app/contexts/WineContext";
 
 export type WineData = {
   id: number;

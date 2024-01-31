@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Button } from "@/components/ui/button";
-import { WineContext } from "./page";
+import { WineContext } from "@/app/contexts/WineContext";
 import {
   Card,
   CardContent,
