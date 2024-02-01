@@ -53,12 +53,12 @@ export function WineSearchForm({
     subRegion: "", // this is a string but the schema expects a number
   };
 
-  // useEffect(() => {
-  //   if (searchTerm) {
-  //     // formDefaultValues.search = searchTerm;
-  //     onSubmit({ search: searchTerm });
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (searchTerm) {
+      // formDefaultValues.search = searchTerm;
+      onSubmit({ search: searchTerm });
+    }
+  }, []);
 
   useEffect(() => {
     if (loading) {
@@ -113,7 +113,7 @@ export function WineSearchForm({
     setLoading(false);
     setSecondsElapsed(0);
     // Clear the search query parameter from the URL
-    router.push("/wine");
+    router.push("/wine/*");
   }
 
   return (

@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
@@ -13,12 +14,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { PocketKnifeIcon, User, Wine } from "lucide-react";
+import { Wine } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export function MainNav() {
-  const pathname = usePathname();
-
+  // const pathname = usePathname();
+  // const router = useRouter();
   return (
     <div className="mr-4 hidden md:flex">
       <Link href="/" className="mr-6 flex items-center space-x-2">
@@ -36,7 +37,7 @@ export function MainNav() {
           Dashboard
         </Link>
         <Link
-          href="/wine"
+          href="/wine/*"
           className="text-foreground/60 transition-colors hover:text-foreground/80"
         >
           Wine
