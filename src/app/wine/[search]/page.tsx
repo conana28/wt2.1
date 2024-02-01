@@ -16,6 +16,7 @@ import { Bottle } from "@prisma/client";
 import ShowBottleTable from "./show-bottle-table";
 
 import { WineContext } from "../../contexts/WineContext";
+import ShowWinesMobile from "./show-wines-mobile";
 
 const wineEmpty: WineData = {
   id: 0,
@@ -178,14 +179,22 @@ const WineSearch = ({ params }: { params: { search: string } }) => {
         </div>
 
         {/* Mobile View */}
-        {/* <div className="w-full md:hidden">
-        <div>
-          <WineSearchForm setWinesFound={setWinesFound} searchTerm="" />
+        {/*  Search Wines Form */}
+        <div className={`sm:hidden ${showAction !== "" ? "opacity-50" : ""}`}>
+          <WineSearchForm
+            searchTerm={params.search === "*" ? "" : params.search}
+          />
+
+          {winesFound.length > 0 && (
+            <p className="text-xs ml-4 mt-2">
+              {winesFound.length} Matching wines
+            </p>
+          )}
         </div>
-        {winesFound.length > 0 && (
-           <div><ShowBottleMobile bottlesFound={bottlesFound} /> </div>
-        )}
-      </div> */}
+        {/* Show wines form */}
+        <div className={`${showAction !== "" ? "opacity-50" : ""}`}>
+          <ShowWinesMobile wines={winesFound} />
+        </div>
       </div>
     </WineContext.Provider>
   );

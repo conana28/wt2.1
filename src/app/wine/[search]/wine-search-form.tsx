@@ -122,7 +122,7 @@ export function WineSearchForm({
       <Card className="">
         <h1 className="text-base font-semibold ml-4 my-2">Search wines</h1>
         {loading && (
-          <div className="text-center text-primary text-xl">
+          <div className="text-center text-primary text-base">
             Loading...{secondsElapsed}
           </div>
         )}
