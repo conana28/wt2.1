@@ -3,7 +3,7 @@ import React from "react";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { TBottle } from "@/types/bottle";
-import { BottlesSearchContext } from "../../contexts/BottlesSearchContext";
+import { BottlesSearchContext } from "@/app/contexts/BottlesSearchContext";
 
 // Define a type for the props
 // export type ShowBottleTableProps = {

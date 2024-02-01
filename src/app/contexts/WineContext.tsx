@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, createContext } from "react";
-import { WineData } from "../wine/columns";
+import { WineData } from "@/app/wine/[search]/columns";
 
 const wineEmpty: WineData = {
   id: 0,

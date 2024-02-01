@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { toast } from "sonner";
-import { BottlesSearchContext } from "../../contexts/BottlesSearchContext";
+import { BottlesSearchContext } from "@/app/contexts/BottlesSearchContext";
 
 // type TBottleConsume = {
 //   id: number;

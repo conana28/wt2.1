@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { BottleFormSchema1, BottleSearchSchema } from "@/lib/schema";
 import { addBottle, updateBottle } from "@/actions/bottle";
 import React from "react";
-import { BottlesSearchContext } from "../../contexts/BottlesSearchContext";
+import { BottlesSearchContext } from "@/app/contexts/BottlesSearchContext";
 import { TBottle } from "@/types/bottle";
 
 // type BottleFormValues = z.infer<typeof BottleFormSchema1>;

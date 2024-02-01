@@ -19,7 +19,7 @@ import { deleteBottle, deleteBottle1 } from "@/actions/bottle";
 
 import { toast } from "sonner";
 import React from "react";
-import { BottlesSearchContext } from "../../contexts/BottlesSearchContext";
+import { BottlesSearchContext } from "@/app/contexts/BottlesSearchContext";
 
 interface BottleFormProps {
   // bid: number;

@@ -21,7 +21,7 @@ import { useContext } from "react";
 import { Edit } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { addNote } from "@/actions/note";
-import { BottlesSearchContext } from "../../contexts/BottlesSearchContext";
+import { BottlesSearchContext } from "@/app/contexts/BottlesSearchContext";
 
 type NoteFormValues = z.infer<typeof NoteFormSchema>;
 

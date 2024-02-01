@@ -21,6 +21,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { searchWines, searchWines1 } from "@/actions/wine";
 import { WineContext } from "@/app/contexts/WineContext";
+import { on } from "events";
 
 // pass a prop to the form to set the bottlesFound state in the parent component
 // type Props = {
@@ -58,7 +59,7 @@ export function WineSearchForm({
       // formDefaultValues.search = searchTerm;
       onSubmit({ search: searchTerm });
     }
-  }, []);
+  }, [onSubmit, searchTerm]);
 
   useEffect(() => {
     if (loading) {

@@ -33,7 +33,7 @@ import { Badge } from "@/components/ui/badge";
 import { BottleConsumeForm } from "./bottle-consume-form";
 import { BottleDeleteForm } from "./bottle-delete-form";
 import { TBottle } from "@/types/bottle";
-import { BottlesSearchContext } from "../../contexts/BottlesSearchContext";
+import { BottlesSearchContext } from "@/app/contexts/BottlesSearchContext";
 import React from "react";
 
 // type BottleProps = {

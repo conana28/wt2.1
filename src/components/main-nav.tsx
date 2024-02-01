@@ -55,7 +55,7 @@ export function MainNav() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
-              <Link href="/bottles-search">
+              <Link href="/bottles-search/*">
                 {/* <PocketKnifeIcon className="mr-2 h-3 w-3" />  */}
                 Bottles Search
               </Link>

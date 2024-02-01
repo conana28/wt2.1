@@ -30,7 +30,7 @@ const wineEmpty: WineData = {
 };
 
 const WineSearch = ({ params }: { params: { search: string } }) => {
-  console.log("Params.search = ", params.search);
+  console.log("Wine params.search = ", params.search);
   const [winesFound, setWinesFound] = React.useState<WineData[]>([]);
   const [showAction, setShowAction] = useState("");
   const [wine, setWine] = useState<WineData>(wineEmpty);
