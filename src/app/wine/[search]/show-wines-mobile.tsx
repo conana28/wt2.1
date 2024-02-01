@@ -16,7 +16,7 @@ export default function ShowTable1({ wines }: Props) {
         {wines.map((wine) => (
           <div key={wine.id}>
             <div className="flex flex-row justify-between">
-              <div className="">
+              <div className="text-lg">
                 {wine.producer} {wine.wineName}
               </div>
 
