@@ -16,20 +16,33 @@ import {
 } from "./ui/dropdown-menu";
 import { Wine } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export function MainNav() {
   // const pathname = usePathname();
-  // const router = useRouter();
+  const router = useRouter();
   return (
     <div className="mr-4 hidden md:flex">
-      <Link href="/" className="mr-6 flex items-center space-x-2">
-        {/* <Icons.logo className="h-6 w-6" /> */}
-        <Wine className="h-4 w-4" />
-        <span className="hidden font-bold sm:inline-block">
-          {siteConfig.name}
-        </span>
-      </Link>
       <nav className="flex items-center space-x-6 text-sm font-medium">
+        {/* <Link href="/" className="mr-6 flex items-center space-x-2"> */}
+        <div
+          className="flex items-center"
+          onClick={() => {
+            toast.info(`Version: ${siteConfig.version}`, {
+              position: "top-center",
+              duration: 1500,
+            });
+            router.push("/");
+          }}
+        >
+          <Wine className="h-4 w-4" />
+          <span className="ml-2 hidden font-bold sm:inline-block">
+            {siteConfig.name}
+          </span>
+        </div>
+
+        {/* </Link> */}
         <Link
           href="/dashboard"
           className="text-foreground/60 transition-colors hover:text-foreground/80"

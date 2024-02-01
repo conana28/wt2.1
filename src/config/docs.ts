@@ -11,11 +11,11 @@ export const docsConfig: DocsConfig = {
   mainNav: [
     {
       title: "Wine",
-      href: "/wine",
+      href: "/wine/*",
     },
     {
       title: "Cellar",
-      href: "/bottles-search",
+      href: "/bottles-search/*",
     },
     // {
     //   title: "GitHub",

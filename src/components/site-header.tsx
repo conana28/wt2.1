@@ -13,6 +13,8 @@ import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { siteConfig } from "@/config/site";
+import { FaNetworkWired } from "react-icons/fa";
+import { SupaBase } from "./svgs";
 
 export function SiteHeader() {
   return (
@@ -33,9 +35,13 @@ export function SiteHeader() {
             <SignedOut>Winetrak</SignedOut>
           </div>
           <div className="text-primary">
-            {process.env.DATABASE_URL?.includes("supabase")
-              ? "Supabase"
-              : "localhost"}
+            {process.env.DATABASE_URL?.includes("supabase") ? (
+              <span>
+                <SupaBase className="w-4 h-4" />
+              </span>
+            ) : (
+              <FaNetworkWired />
+            )}
           </div>{" "}
           <nav className="flex items-center">
             {/* To add an icon button */}
