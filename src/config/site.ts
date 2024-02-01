@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Winetrak",
-  version: "0.1.0",
+  version: "0.1.0a",
   url: "https://ui.shadcn.com",
   ogImage: "https://ui.shadcn.com/og.jpg",
   description:

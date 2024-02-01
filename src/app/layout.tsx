@@ -21,6 +21,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <ClerkProvider
         appearance={{
           baseTheme: dark,
+          elements: {
+            userButtonAvatarBox: "w-6 h-6 -mt-1",
+          },
         }}
       >
         <html lang="en" suppressHydrationWarning>

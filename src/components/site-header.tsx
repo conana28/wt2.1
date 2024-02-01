@@ -65,7 +65,9 @@ export function SiteHeader() {
             <ModeToggle />
             <SignedIn>
               {/* Mount the UserButton component */}
-              <UserButton />
+              <div className="w-4 h-4">
+                <UserButton />
+              </div>
             </SignedIn>
             <SignedOut>
               {/* Signed out users get sign in icon */}
