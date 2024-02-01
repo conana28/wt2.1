@@ -46,7 +46,7 @@ export function CellarSearchForm({ searchTerm }: Props) {
       // formDefaultValues.search = searchTerm;
       onSubmit({ search: searchTerm });
     }
-  }, [onSubmit, searchTerm]);
+  }, []);
 
   useEffect(() => {
     if (loading) {

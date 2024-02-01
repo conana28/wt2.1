@@ -59,7 +59,7 @@ export function WineSearchForm({
       // formDefaultValues.search = searchTerm;
       onSubmit({ search: searchTerm });
     }
-  }, [onSubmit, searchTerm]);
+  }, []);
 
   useEffect(() => {
     if (loading) {
