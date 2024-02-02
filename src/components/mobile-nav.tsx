@@ -12,10 +12,11 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { toast } from "sonner";
 
 export function MobileNav() {
   const [open, setOpen] = React.useState(false);
-
+  const router = useRouter();
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -29,14 +30,18 @@ export function MobileNav() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
-        <MobileLink
-          href="/"
+        <div
           className="flex items-center"
-          onOpenChange={setOpen}
+          onClick={() => {
+            toast.info(`Version: ${siteConfig.version}`, {
+              position: "top-center",
+              duration: 1500,
+            });
+          }}
         >
           <Icons.logo className="mr-2 h-4 w-4" />
           <span className="font-bold">{siteConfig.name}</span>
-        </MobileLink>
+        </div>
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
           <div className="flex flex-col space-y-3">
             {docsConfig.mainNav?.map(
