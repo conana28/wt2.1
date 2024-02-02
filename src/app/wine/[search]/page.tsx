@@ -190,10 +190,10 @@ const WineSearch = ({ params }: { params: { search: string } }) => {
               {winesFound.length} Matching wines
             </p>
           )}
-        </div>
-        {/* Show wines form */}
-        <div className={`${showAction !== "" ? "opacity-50" : ""}`}>
-          <ShowWinesMobile wines={winesFound} />
+          {/* Show wines */}
+          <div className={`${showAction !== "" ? "opacity-50" : ""}`}>
+            <ShowWinesMobile wines={winesFound} />
+          </div>
         </div>
       </div>
     </WineContext.Provider>
